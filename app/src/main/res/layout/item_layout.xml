@@ -7,7 +7,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/image_item"
         android:layout_gravity="left|top"
-        android:scaleType="fitCenter"/>
+        android:scaleType="fitCenter"
+        android:background="@color/white"
+        android:padding="3dp"/>
 
 
 </FrameLayout>

@@ -23,7 +23,9 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -52,14 +54,14 @@ import java.lang.Runnable;
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
-
-    //ArrayAdapter<String> arrayAdapter;
     GridView  gridView;
     ImageAdapter imageAdapter;
     public List <Movie> movies;
 
     private String sortTypeSaved;
     private ProgressBar progressBar;
+    private View v;
+    private View view;
 
     public MainActivityFragment() {
         this.sortTypeSaved = "";
@@ -69,7 +71,6 @@ public class MainActivityFragment extends Fragment {
     }
     @Override
     public void onAttach(Context context) {
-        Log.v("Activity", "Attached");
         super.onAttach(context);
     }
 
@@ -80,51 +81,19 @@ public class MainActivityFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("movies", (ArrayList<Movie>) movies);
         super.onSaveInstanceState(outState);
-
-
-        Log.v("onSaveInstanceState ", "SAVING STATE");
-        Log.v("Saving State", outState.toString());
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.v("MainFragment ", "RESUMED");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.v("MainFragment ", "STOPPED");
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.v("MainFragment ", "DESTROYED");
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.fragment_main, null);
-        this.progressBar = (ProgressBar)v.findViewById(R.id.progress_bar);
-
-        Log.v("PROGRESS_BAR", String.valueOf(progressBar.hashCode()));
+        view = inflater.inflate(R.layout.fragment_main, null);
+        this.progressBar = (ProgressBar)view.findViewById(R.id.progress_bar);
 
         if (savedInstanceState != null){
-            Log.v("onCreate ", "EXISTING STATE");
             this.movies = savedInstanceState.getParcelableArrayList("movies");
-        }else{
-            Log.v("onCreate ", "EMPTY STATE");
         }
 
         setHasOptionsMenu(true);
@@ -152,8 +121,8 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        gridView =  (GridView) rootView.findViewById(R.id.gridview);
+       // View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        gridView =  (GridView) view.findViewById(R.id.gridview);
         imageAdapter = new ImageAdapter(getActivity());
         gridView.setAdapter(imageAdapter);
 
@@ -175,6 +144,14 @@ public class MainActivityFragment extends Fragment {
                 if (date == "null") {
                     date = "Release date is not available";
                 }
+                //path = "null";
+
+                if (path == "null"){
+                    path = "android.resource://com.example.jenny.popular_movies_s1/" + R.drawable.no_image;
+                }else{
+                    String base = "http://image.tmdb.org/t/p/w342/";
+                    path = base + path;
+                }
 
 
                 Intent intent = new Intent(getActivity(), DetailActivity.class);
@@ -184,30 +161,13 @@ public class MainActivityFragment extends Fragment {
                 extras.putString("DATE", date);
                 extras.putDouble("VOTE", vote);
                 extras.putString("PATH", path);
-                /*
-                Is it a good idea to pass ArrayList this way so only it can be saved on InstanceState?
-                 */
-                //extras.putParcelableArrayList("movies", (ArrayList<Movie>) movies);
 
                 intent.putExtras(extras);
                 startActivity(intent);
             }
         });
 
-      /*  View rootView = inflater.inflate(R.layout.fragment_main, container,false);
-         Integer[] array = {
-                R.drawable.sample_1, R.drawable.sample_2,
-                R.drawable.sample_3, R.drawable.sample_4,
-
-        };
-        List<Integer> al = new ArrayList<Integer>(Arrays.asList(array));
-
-        arrayAdapter = new ArrayAdapter<String>(getActivity(),R.layout.item_layout, R.id.image_item,al);
-        GridView grid = (GridView) rootView.findViewById(R.id.gridview);
-        grid.setAdapter(arrayAdapter);
-
-*/
-        return rootView;
+        return view;
     }
 
     public class ImageAdapter extends BaseAdapter{
@@ -240,7 +200,8 @@ public class MainActivityFragment extends Fragment {
 
             if (convertView == null){
                 imageView = new ImageView(mContext);
-                imageView.setLayoutParams(new GridView.LayoutParams(200, 300));
+                //imageView.setLayoutParams(new GridView.LayoutParams(200, 300));
+                imageView.setLayoutParams(new GridView.LayoutParams(342, 460));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setPadding(2, 2, 2, 2);
             }else{
@@ -254,20 +215,20 @@ public class MainActivityFragment extends Fragment {
 
                 if (array1[position] != null) {
 //Log.v("Position ", array1[position]);
-                    String base = "http://image.tmdb.org/t/p/w185/";
+                    String base = "http://image.tmdb.org/t/p/w342/";
                     String link = "";
                     url.delete(0, url.length());
+
+                    //array1[position] = null;
                     if (array1[position] == null){
 
                         url.append("android.resource://com.example.jenny.popular_movies_s1/");
                         url.append(R.drawable.no_poster);
-                        Log.v("LINK ", url.toString());
                     }else{
 
                         link = array1[position];
                         url.append(base);
                         url.append(link);
-                        Log.v("LINK ", url.toString());
                     }
 
                     Picasso.with(mContext).load(url.toString()).into(imageView);
@@ -286,40 +247,27 @@ public class MainActivityFragment extends Fragment {
         String sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
 
         if (sortType.equals(sortTypeSaved)){
-            Log.v("Equals", "YAY");
-            Log.v(sortType.toString(), sortTypeSaved.toString());
 
             if (movies == null || movies.isEmpty()){
-
-                Log.v("movies ARRAY", "EMPTY");
                 DownloadJsonDataTask asyncDownload = new DownloadJsonDataTask();
                 asyncDownload.execute(sortType);
             }else{
-                Log.v("Equals", "NOPE");
-                Log.v("movies ARRAY", " not EMPTY");
                 updateUI();
             }
         }else{
-            Log.v(sortType.toString(), sortTypeSaved.toString());
-           // if (movies == null || movies.isEmpty()){
             DownloadJsonDataTask asyncDownload = new DownloadJsonDataTask();
                 asyncDownload.execute(sortType);
-          //  }else{
-           // }
+
         }
 
-      /*  if (movies == null || movies.isEmpty()){
-            asyncDownload.execute(sortType);
-        }else{
-            updateUI();
-        }*/
         sortTypeSaved = sortType;
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.v("onStart ", "START");
+        //Log.v("onStart ", "START");
         //Log.v("Movies Size ", String.valueOf(movies.size()));
                 update();
     }
@@ -338,7 +286,7 @@ public class MainActivityFragment extends Fragment {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("http://api.themoviedb.org/3/discover/movie?sort_by=");
             stringBuilder.append(sortType);
-            stringBuilder.append(".desc&api_key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            stringBuilder.append(".desc&api_key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 
 
             try{
@@ -404,14 +352,17 @@ public class MainActivityFragment extends Fragment {
 
 
        }else{
-           Log.v("MOVIE ARRAY", "- I HAVE NO DATA");
+          //Log.v("MOVIE ARRAY", "- I HAVE NO DATA");
        }
 
-        Log.v("HIDE", "BEFORE");
-        Log.v("PROGRESS_BAR", String.valueOf(progressBar.hashCode()));
-        progressBar.setVisibility(View.GONE);
+      //  Log.v("HIDE", "BEFORE");
+      //  Log.v("PROGRESS_BAR", String.valueOf(progressBar.hashCode()));
+       progressBar.setVisibility(View.GONE);
+       // this.progressBar.setVisibility(0);
 
-        Log.v("HIDE", "AFTER");
+      //  this.progressBar.setVisibility(LinearLayout.GONE);
+
+      //  Log.v("HIDE", "AFTER");
 
     }
     private List<Movie> getJsonDataArray(String rawJsonStr) throws JSONException{

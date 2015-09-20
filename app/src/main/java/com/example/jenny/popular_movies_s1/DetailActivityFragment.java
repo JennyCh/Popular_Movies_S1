@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -62,9 +64,11 @@ public class DetailActivityFragment extends Fragment {
         Double vote = intent.getDoubleExtra("VOTE", -1);
 
 
-        String base = "http://image.tmdb.org/t/p/w342/";
-        String link = base + path;
+
+
+        String link = path;
         DownloadSingleImage asyncDownload = new DownloadSingleImage((ImageView) rootView.findViewById(R.id.detail_image));
+        Log.v("LINK", link.toString());
         asyncDownload.execute(link);
         titleView = (TextView) rootView.findViewById(R.id.detail_title);
         overViewView = (TextView) rootView.findViewById(R.id.detail_overview);
@@ -84,14 +88,14 @@ public class DetailActivityFragment extends Fragment {
 
     public class DownloadSingleImage extends AsyncTask<String,Void,Bitmap> {
         private ImageView btmImage;
-
+private String url;
         public DownloadSingleImage(ImageView btmImage){
             this.btmImage = btmImage;
         }
 
         @Override
         protected Bitmap doInBackground(String... urls) {
-            String url = urls[0];
+            url = urls[0];
             Bitmap image = null;
             //Log.v("URL for iamge ", url);
             try{
@@ -100,6 +104,7 @@ public class DetailActivityFragment extends Fragment {
 
             }catch(Exception e){
                 e.printStackTrace();
+
             }
 
             return image;
@@ -107,7 +112,14 @@ public class DetailActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            btmImage.setImageBitmap(bitmap);
+            if(bitmap != null) {
+                btmImage.setImageBitmap(bitmap);
+            }else{
+                btmImage.setLayoutParams(new LinearLayout.LayoutParams(342, 460));
+                btmImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                btmImage.setPadding(15, 15, 15, 15);
+                Picasso.with(getContext()).load(url.toString()).into(btmImage);
+            }
         }
     }
 

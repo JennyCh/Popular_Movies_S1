@@ -1,4 +1,4 @@
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -6,30 +6,31 @@
     tools:context=".MainActivityFragment">
 
 
-
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="@color/black"
+        android:visibility="visible"
+        />
 
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridview"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:columnWidth="130dp"
+        android:layout_height="wrap_content"
+
         android:numColumns="auto_fit"
-        android:verticalSpacing="10dp"
-        android:horizontalSpacing="10dp"
-        android:padding="5dp"
+        android:verticalSpacing="2dp"
+        android:horizontalSpacing="0dp"
+
         android:stretchMode="columnWidth"
         android:gravity="center"
-        android:background="@color/blue"
-        />
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom"
-        android:background="@color/red"
-        android:padding="20dp"
-
+        android:background="@color/black"
+        android:layout_below="@+id/progress_bar"
+        android:columnWidth="165dp"
 
         />
-</FrameLayout>
+
+
+</RelativeLayout>

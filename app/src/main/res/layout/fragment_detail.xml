@@ -19,7 +19,8 @@
             android:id="@+id/detail_image"
             android:layout_margin="15dp"
             android:maxHeight="342dp"
-            android:background="@color/black"
+            android:padding="1dp"
+            android:background="@color/gray"
 
             />
 
