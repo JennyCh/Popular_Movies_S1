@@ -68,7 +68,7 @@ public class DetailActivityFragment extends Fragment {
 
         String link = path;
         DownloadSingleImage asyncDownload = new DownloadSingleImage((ImageView) rootView.findViewById(R.id.detail_image));
-        Log.v("LINK", link.toString());
+        //Log.v("LINK", link.toString());
         asyncDownload.execute(link);
         titleView = (TextView) rootView.findViewById(R.id.detail_title);
         overViewView = (TextView) rootView.findViewById(R.id.detail_overview);

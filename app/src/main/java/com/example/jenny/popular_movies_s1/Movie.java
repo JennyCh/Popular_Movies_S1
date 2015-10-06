@@ -3,25 +3,32 @@ package com.example.jenny.popular_movies_s1;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by Jenny on 8/16/2015.
  */
 public class Movie implements Parcelable {
 
+
+    private int id;
     private String title;
     private String path;
     private String overview;
     private String releaseDate;
     private double vote;
+    private ArrayList <Review> reviews;
 
-    public Movie(String title, String overview, double vote, String releaseDate, String path) {
+    public Movie(int id, String title, String overview, double vote, String releaseDate, String path) {
         this.title = title;
         this.overview = overview;
         this.vote = vote;
         this.releaseDate = releaseDate;
         this.path = path;
+        this.id = id;
     }
 
+    public int getId (){return id;}
     public String getTitle() {
         return title;
     }
@@ -48,6 +55,7 @@ public class Movie implements Parcelable {
         this.overview = source.readString();
         this.releaseDate = source.readString();
         this.vote = source.readDouble();
+        this.id = source.readInt();
 
     }
 
@@ -70,6 +78,7 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(title);
         dest.writeSerializable(path);
         dest.writeString(overview);
@@ -77,14 +86,5 @@ public class Movie implements Parcelable {
         dest.writeDouble(vote);
     }
 
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "title='" + title + '\'' +
-                ", path='" + path + '\'' +
-                ", overview='" + overview + '\'' +
-                ", releaseDate='" + releaseDate + '\'' +
-                ", vote=" + vote +
-                '}';
-    }
+
 }

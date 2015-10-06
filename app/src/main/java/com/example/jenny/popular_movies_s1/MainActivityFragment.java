@@ -252,6 +252,9 @@ public class MainActivityFragment extends Fragment {
                 DownloadJsonDataTask asyncDownload = new DownloadJsonDataTask();
                 asyncDownload.execute(sortType);
             }else{
+                for(Movie m:movies){
+                    Log.v("MOVIE", m.toString());
+                }
                 updateUI();
             }
         }else{
@@ -281,12 +284,12 @@ public class MainActivityFragment extends Fragment {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             String rawJsonStr = null;
-            Log.v("AsyncTask JSON ", "GETTING JSON");
+            //Log.v("AsyncTask JSON ", "GETTING JSON");
             String sortType = params[0];
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("http://api.themoviedb.org/3/discover/movie?sort_by=");
             stringBuilder.append(sortType);
-            stringBuilder.append(".desc&api_key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+            stringBuilder.append(".desc&api_key=xxxxxxxxxxxxxxxxxxxxxxxx");
 
 
             try{
@@ -374,6 +377,7 @@ public class MainActivityFragment extends Fragment {
         */
 
         final String RESULTS = "results";
+        final String ID = "id";
         final String ORIGINAL_TITLE = "original_title";
         final String OBJECT = "object";
         final String PATH = "poster_path";
@@ -389,12 +393,13 @@ public class MainActivityFragment extends Fragment {
 
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject object = jsonArray.getJSONObject(i);
+            int id = object.getInt(ID);
             String title = object.getString(ORIGINAL_TITLE);
             String path = object.getString(PATH);
             String overview = object.getString(OVERVIEW);
             double vote = object.getDouble(VOTE_AVERAGE);
             String releaseDate = object.getString(RELEASE_DATE);
-            movies.add(new Movie(title, overview, vote, releaseDate, path));
+            movies.add(new Movie(id,title, overview, vote, releaseDate, path));
 
         }
 

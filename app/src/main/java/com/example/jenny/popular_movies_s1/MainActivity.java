@@ -21,6 +21,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
 
     public List<Movie> movies;
+    private boolean twoPane;
 
     // public ProgressBar progressBar;
 
@@ -28,6 +29,16 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+   /*     if(findViewById(R.id.movie_detail_container) != null){
+
+            twoPane = true;
+
+            if (savedInstanceState == null){
+                getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, new DetailActivityFragment()).commit();
+            }
+        }else{
+            twoPane = false;
+        }*/
 
 
         //this.progressBar = (ProgressBar) findViewById(R.id.progress_bar);
