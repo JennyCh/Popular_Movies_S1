@@ -148,7 +148,29 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        return null;
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+        final int match = uriMathcher.match(uri);
+
+        Uri returnUri;
+        Log.v("INSERT MOVIE PROVIDER", "HERE");
+        switch(match){
+            case MOVIE:{
+                Log.v("INSERT MOVIE PROVIDER", "MOVIE");
+                long _id = db.insert(MovieContract.Movie.TABLE_NAME, null,values);
+                if (_id < 0) {
+                    throw new android.database.SQLException("Failed to insert into " + uri);
+                }else{
+                    returnUri = MovieContract.Movie.buildMovieID((int) _id);
+                }
+                break;
+            }
+            default:
+                Log.v("INSERT MOVIE PROVIDER", "DEFAULT");
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return returnUri;
     }
 
     @Override

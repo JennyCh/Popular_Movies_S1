@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 import android.util.Log;
@@ -64,14 +65,23 @@ public class TestProvider extends AndroidTestCase{
         MovieDBHelper dbHelper = new MovieDBHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        ContentValues contentValues = TestUtilities.createMovieValues();
+        ContentValues movieValues = TestUtilities.createMovieValues();
         long movieRowId = TestUtilities.insertMovieValues(mContext);
 
-        ContentValues trailerValues = TestUtilities.createTrailerVelues(movieRowId);
-        long trailerRowId = db.insert(MovieContract.Movie.TABLE_NAME,null, trailerValues);
 
-        assertTrue("Unable to Insert WeatherEntry into the Database", trailerRowId != -1);
+        assertTrue("Error: Failure to insert Movie Values", movieRowId != -1);
+        //long movieRowId = TestUtilities.insertMovieValues(mContext);
         db.close();
+
+        Cursor movieCursor = mContext.getContentResolver().query(
+                MovieContract.Movie.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+        TestUtilities.validateCursor("testBasicWeatherQuery", movieCursor, movieValues);
+
 
 
     }
