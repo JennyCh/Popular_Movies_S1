@@ -41,10 +41,14 @@ public class MovieContract {
 
         public static Uri buildMovieID(int id){
             Uri uri = ContentUris.withAppendedId(CONTENT_URI, id);
+            Log.v("BUILD MOVIE ID", uri.toString());
             return uri;
         }
 
-     /*   public static Uri buildMovieID(int id){
+      /*  public static Uri buildMovie
+
+
+      ID(int id){
             //return ContentUris.withAppendedId(CONTENT_URI, id);
             Uri uri = CONTENT_URI.buildUpon().appendQueryParameter(_ID, String.valueOf(id)).build();
             Log.v("BUILD MOVIE ID", uri.toString());

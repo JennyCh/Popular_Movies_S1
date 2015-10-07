@@ -47,9 +47,9 @@ public class TestUtilities extends AndroidTestCase {
         return  movieValues;
     }
 
-    static ContentValues createTrailerVelues (){
+    static ContentValues createTrailerVelues (long id){
         ContentValues trailerValues = new ContentValues();
-        trailerValues.put(MovieContract.Trailer._ID, 1234);
+        trailerValues.put(MovieContract.Trailer._ID, id);
         trailerValues.put(MovieContract.Trailer.KEY, "ahduHJK08GL8j8");
         trailerValues.put(MovieContract.Trailer.NAME, "Trailer from Hell");
         trailerValues.put(MovieContract.Trailer.TYPE, "Trailer");
