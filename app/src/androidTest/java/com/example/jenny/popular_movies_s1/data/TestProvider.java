@@ -60,17 +60,17 @@ public class TestProvider extends AndroidTestCase{
     }
 
     public void testBasicMovieQuery(){
-        MovieDBHelper dbHelper = new MovieDBHelper(mContext);
+/*        MovieDBHelper dbHelper = new MovieDBHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        ContentValues movieValues = TestUtilities.createMovieValues();
+
         long recordNum = db.insert(MovieContract.Movie.TABLE_NAME, null,movieValues);
         assertTrue("Unable to Insert WeatherEntry into the Database", recordNum != -1);
-        db.close();
-
-        String selection = "MovieContract.Movie.FAVORITE = ?";
+        db.close();*/
+        ContentValues movieValues = TestUtilities.createMovieValues();
+        String selection = "MovieContract.Movie.favorite = ?";
         String [] selectionArgs = new String [] {"'1'"};
-        String sortOrder = "MovieContract.Movie.TITLE";
+        String sortOrder = "MovieContract.Movie.title";
 
 
 
