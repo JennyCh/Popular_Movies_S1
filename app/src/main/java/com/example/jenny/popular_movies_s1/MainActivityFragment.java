@@ -2,9 +2,13 @@ package com.example.jenny.popular_movies_s1;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -28,6 +32,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.jenny.popular_movies_s1.data.MovieContract;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -275,9 +280,40 @@ public class MainActivityFragment extends Fragment {
                 update();
     }
 
+
     public class DownloadJsonDataTask extends AsyncTask <String,Void,List<Movie>>{
+        private final Context mContext;
 
+        public DownloadJsonDataTask(Context context) {
+            mContext = context;
+        }
 
+        long addMovie(String id, String title, String overview, String path, String vote, String release_date, String sortType){
+            long movieId;
+            Cursor movieCursor = mContext.getContentResolver().query(MovieContract.Movie.CONTENT_URI,new String[]{MovieContract.Movie._ID},
+                    MovieContract.Movie._ID + " = ?", new String[]{id}, null);
+
+            if(movieCursor.moveToFirst()){
+                int movieIDindex = movieCursor.getColumnIndex(MovieContract.Movie._ID);
+                movieId = movieCursor.getLong(movieIDindex);
+            }else{
+                ContentValues movieValues = new ContentValues();
+
+                movieValues.put(MovieContract.Movie._ID, id);
+                movieValues.put(MovieContract.Movie.TITLE, title);
+                movieValues.put(MovieContract.Movie.OVERVIEW,overview);
+                movieValues.put(MovieContract.Movie.VOTE_AVERAGE, vote);
+                movieValues.put(MovieContract.Movie.RELEASE_DATE, release_date);
+                movieValues.put(MovieContract.Movie.FAVORITE, "0");
+                movieValues.put(MovieContract.Movie.SORT_TYPE, sortType);
+
+                Uri insertedUri = mContext.getContentResolver().insert(MovieContract.Movie.CONTENT_URI, movieValues);
+                movieId = ContentUris.parseId(insertedUri);
+
+            }
+            movieCursor.close();
+            return movieId;
+        }
 
         @Override
         protected List<Movie> doInBackground(String... params) {
@@ -343,7 +379,10 @@ public class MainActivityFragment extends Fragment {
         protected void onPostExecute(List<Movie> movies) {
             updateUI();
         }
+
     }
+
+
     public void updateUI(){
        if(movies != null) {
            for (int i = 0; i < array1.length; i++) {
@@ -368,6 +407,7 @@ public class MainActivityFragment extends Fragment {
       //  Log.v("HIDE", "AFTER");
 
     }
+
     private List<Movie> getJsonDataArray(String rawJsonStr) throws JSONException{
         /*  original title
             movie poster image thumbnail
@@ -375,6 +415,8 @@ public class MainActivityFragment extends Fragment {
             user rating (called vote_average in the api)
             release date
         */
+
+
 
         final String RESULTS = "results";
         final String ID = "id";

@@ -48,6 +48,20 @@ public class TestUtilities extends AndroidTestCase {
         return  movieValues;
     }
 
+    static ContentValues createAnotherMovieValues (){
+        ContentValues movieValues = new ContentValues();
+        movieValues.put(MovieContract.Movie._ID, 12346);
+        movieValues.put(MovieContract.Movie.TITLE, "Cinderella");
+            movieValues.put(MovieContract.Movie.OVERVIEW, "Lost shoe mistery");
+        movieValues.put(MovieContract.Movie.POSTER_PATH, "cinderella.image.jpg");
+        movieValues.put(MovieContract.Movie.RELEASE_DATE, "Feb 3, 2016");
+        movieValues.put(MovieContract.Movie.VOTE_AVERAGE, "6.0");
+        movieValues.put(MovieContract.Movie.SORT_TYPE, 2);
+        movieValues.put(MovieContract.Movie.FAVORITE, 0);
+
+        return  movieValues;
+    }
+
     static ContentValues createTrailerValues (long id){
         ContentValues trailerValues = new ContentValues();
         trailerValues.put(MovieContract.Trailer._ID, id);

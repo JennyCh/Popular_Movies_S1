@@ -38,7 +38,7 @@ public class TestProvider extends AndroidTestCase{
       //PASSED
       type = mContext.getContentResolver().getType(MovieContract.Movie.CONTENT_URI);
         assertEquals("Error: the Movie CONTENT_URI should return Movie.CONTENT_DIR_TYPE", MovieContract.Movie.CONTENT_DIR_TYPE, type);
-
+/*
        //PASSED
        int testID = 12345;
         type = mContext.getContentResolver().getType(MovieContract.Movie.buildMovieID(testID));
@@ -56,21 +56,23 @@ public class TestProvider extends AndroidTestCase{
         assertEquals("Error: the Review CONTENT_URI should return Review.CONTENT_DIR_TYPE", MovieContract.Trailer.CONTENT_DIR_TYPE, type);
 
         type = mContext.getContentResolver().getType(MovieContract.Trailer.buildTrailerID(testID));
-        assertEquals("Error: the Review CONTENT_URI should return Review.CONTENT_DIR_TYPE", MovieContract.Trailer.CONTENT_DIR_TYPE, type);
+        assertEquals("Error: the Review CONTENT_URI should return Review.CONTENT_DIR_TYPE", MovieContract.Trailer.CONTENT_DIR_TYPE, type);*/
     }
 
     public void testBasicMovieQuery(){
-/*        MovieDBHelper dbHelper = new MovieDBHelper(mContext);
+        MovieDBHelper dbHelper = new MovieDBHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-
-        long recordNum = db.insert(MovieContract.Movie.TABLE_NAME, null,movieValues);
-        assertTrue("Unable to Insert WeatherEntry into the Database", recordNum != -1);
-        db.close();*/
+        db.delete(MovieContract.Movie.TABLE_NAME, null, null);
         ContentValues movieValues = TestUtilities.createMovieValues();
-        String selection = "MovieContract.Movie.favorite = ?";
-        String [] selectionArgs = new String [] {"'1'"};
-        String sortOrder = "MovieContract.Movie.title";
+        long recordNum = db.insert(MovieContract.Movie.TABLE_NAME, null,movieValues);
+        movieValues = TestUtilities.createAnotherMovieValues();
+        recordNum = db.insert(MovieContract.Movie.TABLE_NAME, null, movieValues);
+        assertTrue("Unable to Insert WeatherEntry into the Database", recordNum != -1);
+        db.close();
+
+        String selection = MovieContract.Movie.FAVORITE + " = ?";
+        String [] selectionArgs = new String [] {"0"};
+        String sortOrder = MovieContract.Movie.TITLE;
 
 
 
@@ -81,7 +83,16 @@ public class TestProvider extends AndroidTestCase{
                 selectionArgs,
                 sortOrder
         );
-        TestUtilities.validateCursor("testBasicWeatherQuery", movieCursor, movieValues);
+        int titleColumn = movieCursor.getColumnIndex(MovieContract.Movie.TITLE);
+        while (movieCursor.moveToNext()){
+            String name = movieCursor.getString(titleColumn);
+
+            assertEquals("Movie titles do not match ", name, "Cinderella");
+        }
+
+        //TestUtilities.validateCursor("testBasicWeatherQuery", movieCursor, movieValues);
+
+
 
         movieCursor.close();
     }
