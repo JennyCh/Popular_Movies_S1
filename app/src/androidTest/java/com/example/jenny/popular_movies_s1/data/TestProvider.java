@@ -1,11 +1,13 @@
 package com.example.jenny.popular_movies_s1.data;
 
 import android.content.ComponentName;
+import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
@@ -32,17 +34,13 @@ public class TestProvider extends AndroidTestCase{
     public void testGetType(){
         String type;
 
-        type = mContext.getContentResolver().getType(MovieContract.Movie.CONTENT_URI);
+
+      //PASSED
+      type = mContext.getContentResolver().getType(MovieContract.Movie.CONTENT_URI);
         assertEquals("Error: the Movie CONTENT_URI should return Movie.CONTENT_DIR_TYPE", MovieContract.Movie.CONTENT_DIR_TYPE, type);
 
-        type = mContext.getContentResolver().getType(MovieContract.Movie.buildMovieFavorite());
-        assertEquals("Error: the Movie CONTENT_URI with favorite should return Movie.CONTENT_DIR_TYPE", MovieContract.Movie.CONTENT_DIR_TYPE, type);
-
-        int sortType = 1;
-        type = mContext.getContentResolver().getType(MovieContract.Movie.buildMovieType(sortType));
-        assertEquals("Error: the Movie CONTENT_URI with favorite should return Movie.CONTENT_DIR_TYPE", MovieContract.Movie.CONTENT_DIR_TYPE, type);
-
-        int testID = 12345;
+       //PASSED
+       int testID = 12345;
         type = mContext.getContentResolver().getType(MovieContract.Movie.buildMovieID(testID));
         Log.v("Type", "MovieContract.Movie.CONTENT_ITEM_TYPE");
         //Log.v("Type", type.toString());
@@ -62,27 +60,23 @@ public class TestProvider extends AndroidTestCase{
     }
 
     public void testBasicMovieQuery(){
-        MovieDBHelper dbHelper = new MovieDBHelper(mContext);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+
+        String selection = "MovieContract.Movie.FAVORITE = ?";
+        String [] selectionArgs = new String [] {"1"};
+        String sortOrder = "MovieContract.Movie.TITLE";
 
         ContentValues movieValues = TestUtilities.createMovieValues();
-        long movieRowId = TestUtilities.insertMovieValues(mContext);
-
-
-        assertTrue("Error: Failure to insert Movie Values", movieRowId != -1);
-        //long movieRowId = TestUtilities.insertMovieValues(mContext);
-        db.close();
 
         Cursor movieCursor = mContext.getContentResolver().query(
                 MovieContract.Movie.CONTENT_URI,
                 null,
-                null,
-                null,
-                null
+                selection,
+                selectionArgs,
+                sortOrder
         );
         TestUtilities.validateCursor("testBasicWeatherQuery", movieCursor, movieValues);
 
-
-
+        movieCursor.close();
     }
 }

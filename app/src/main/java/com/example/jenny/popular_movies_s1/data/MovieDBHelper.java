@@ -3,6 +3,7 @@ package com.example.jenny.popular_movies_s1.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.jenny.popular_movies_s1.Review;
 
@@ -11,8 +12,8 @@ import com.example.jenny.popular_movies_s1.Review;
  */
 public class MovieDBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
-    static final String DATABASE_NAME = "movies.db";
+    private static final int DATABASE_VERSION = 7;
+    static final String DATABASE_NAME = "movie.db";
 
     //Log.v
 
@@ -51,6 +52,10 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 MovieContract.Movie.SORT_TYPE + " INTEGER NOT NULL, " +
                 MovieContract.Movie.FAVORITE + " INTEGER DEFAULT 0 " +
                 " );";
+        Log.v("MovieDBHelper", SQL_CREATE_MOVIE_TABLE);
+        Log.v("MovieDBHelper", SQL_CREATE_REVIEW_TABLE);
+        Log.v("MovieDBHelper", SQL_CREATE_TRAILER_TABLE);
+
 
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
         db.execSQL(SQL_CREATE_REVIEW_TABLE);
@@ -63,6 +68,8 @@ public class MovieDBHelper extends SQLiteOpenHelper {
         /*
         Needs something that will wipe all but favorites from all 3 tables
          */
+
+        Log.v("MovieDBHelper", "DELETING TABLES");
 
         db.execSQL("DROP TABLE IF EXISTS " + MovieContract.Trailer.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + MovieContract.Review.TABLE_NAME);

@@ -36,7 +36,7 @@ public class TestUtilities extends AndroidTestCase {
 
     static ContentValues createMovieValues (){
         ContentValues movieValues = new ContentValues();
-        movieValues.put(MovieContract.Movie._ID, 1234);
+        movieValues.put(MovieContract.Movie._ID, 12345);
         movieValues.put(MovieContract.Movie.TITLE, "TITANIC");
         movieValues.put(MovieContract.Movie.OVERVIEW, "Rose frees Jack from his chains with an axe.");
         movieValues.put(MovieContract.Movie.POSTER_PATH, "titanic.image.jpg");
@@ -48,7 +48,7 @@ public class TestUtilities extends AndroidTestCase {
         return  movieValues;
     }
 
-    static ContentValues createTrailerVelues (long id){
+    static ContentValues createTrailerValues (long id){
         ContentValues trailerValues = new ContentValues();
         trailerValues.put(MovieContract.Trailer._ID, id);
         trailerValues.put(MovieContract.Trailer.KEY, "ahduHJK08GL8j8");

@@ -30,7 +30,7 @@ public class MovieContract {
 
         public static final String TABLE_NAME = "movie";
 
-        public static final String _ID = "id";
+        //public static final String _ID = "id";
         public static final String TITLE = "title";
         public static final String OVERVIEW = "overview";
         public static final String RELEASE_DATE = "release_date";
@@ -60,6 +60,7 @@ public class MovieContract {
         }
 
         public static Uri buildMovieFavorite (){
+            Log.v("URI buildMovieFavorite", CONTENT_URI.buildUpon().appendQueryParameter(FAVORITE, "1").build().toString());
             return CONTENT_URI.buildUpon().appendQueryParameter(FAVORITE, "1").build();
         }
     }
