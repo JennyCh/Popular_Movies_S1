@@ -30,12 +30,12 @@ public class MovieContract {
 
         public static final String TABLE_NAME = "movie";
 
-        //public static final String _ID = "id";
         public static final String TITLE = "title";
         public static final String OVERVIEW = "overview";
         public static final String RELEASE_DATE = "release_date";
         public static final String POSTER_PATH = "poster_path";
         public static final String VOTE_AVERAGE = "vote_average";
+        public static final String VOTE_COUNT = "vote_count";
         public static final String SORT_TYPE = "sort_type";
         public static final String FAVORITE = "favorite";
 
@@ -43,25 +43,6 @@ public class MovieContract {
             Uri uri = ContentUris.withAppendedId(CONTENT_URI, id);
             Log.v("BUILD MOVIE ID", uri.toString());
             return uri;
-        }
-
-      /*  public static Uri buildMovie
-
-
-      ID(int id){
-            //return ContentUris.withAppendedId(CONTENT_URI, id);
-            Uri uri = CONTENT_URI.buildUpon().appendQueryParameter(_ID, String.valueOf(id)).build();
-            Log.v("BUILD MOVIE ID", uri.toString());
-            return uri;
-        }*/
-
-        public static Uri buildMovieType (int type){
-            return CONTENT_URI.buildUpon().appendQueryParameter(SORT_TYPE, String.valueOf(type)).build();
-        }
-
-        public static Uri buildMovieFavorite (){
-            Log.v("URI buildMovieFavorite", CONTENT_URI.buildUpon().appendQueryParameter(FAVORITE, "1").build().toString());
-            return CONTENT_URI.buildUpon().appendQueryParameter(FAVORITE, "1").build();
         }
     }
 
@@ -76,6 +57,7 @@ public class MovieContract {
 
         public static final String TABLE_NAME = "review";
 
+        public static final String UNIQUE_REVIEW_ID = "unique_review_id";
         public static final String AUTHOR = "author";
         public static final String CONTENT = "content";
 
@@ -96,9 +78,11 @@ public class MovieContract {
 
         public static final String TABLE_NAME = "trailer";
 
+        public static final String UNIQUE_TRAILER_ID = "unique_trailer_id";
         public static final String KEY = "key";
         public static final String NAME = "name";
         public static final String TYPE = "type";
+        public static final String SIZE = "size";
 
         public static Uri buildTrailerID(int id){
             return ContentUris.withAppendedId(CONTENT_URI, id);

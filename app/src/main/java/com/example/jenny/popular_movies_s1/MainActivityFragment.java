@@ -254,7 +254,7 @@ public class MainActivityFragment extends Fragment {
         if (sortType.equals(sortTypeSaved)){
 
             if (movies == null || movies.isEmpty()){
-                DownloadJsonDataTask asyncDownload = new DownloadJsonDataTask();
+                DownloadJsonDataTask asyncDownload = new DownloadJsonDataTask(getContext());
                 asyncDownload.execute(sortType);
             }else{
                 for(Movie m:movies){
@@ -263,7 +263,7 @@ public class MainActivityFragment extends Fragment {
                 updateUI();
             }
         }else{
-            DownloadJsonDataTask asyncDownload = new DownloadJsonDataTask();
+            DownloadJsonDataTask asyncDownload = new DownloadJsonDataTask(getContext());
                 asyncDownload.execute(sortType);
 
         }
@@ -280,13 +280,40 @@ public class MainActivityFragment extends Fragment {
                 update();
     }
 
+    public void updateUI(){
+        if(movies != null) {
+            for (int i = 0; i < array1.length; i++) {
+                //Log.v("PATH in array1 " , movies.get(i).getPath());
+                array1[i] = (movies.get(i).getPath());
+            }
 
+            gridView.setAdapter(imageAdapter);
+
+
+        }else{
+            //Log.v("MOVIE ARRAY", "- I HAVE NO DATA");
+        }
+
+        //  Log.v("HIDE", "BEFORE");
+        //  Log.v("PROGRESS_BAR", String.valueOf(progressBar.hashCode()));
+        progressBar.setVisibility(View.GONE);
+        // this.progressBar.setVisibility(0);
+
+        //  this.progressBar.setVisibility(LinearLayout.GONE);
+
+        //  Log.v("HIDE", "AFTER");
+
+    }
+
+/*
     public class DownloadJsonDataTask extends AsyncTask <String,Void,List<Movie>>{
         private final Context mContext;
 
         public DownloadJsonDataTask(Context context) {
             mContext = context;
         }
+
+
 
         long addMovie(String id, String title, String overview, String path, String vote, String release_date, String sortType){
             long movieId;
@@ -382,42 +409,19 @@ public class MainActivityFragment extends Fragment {
 
     }
 
+*/
 
-    public void updateUI(){
-       if(movies != null) {
-           for (int i = 0; i < array1.length; i++) {
-               //Log.v("PATH in array1 " , movies.get(i).getPath());
-               array1[i] = (movies.get(i).getPath());
-           }
-
-           gridView.setAdapter(imageAdapter);
-
-
-       }else{
-          //Log.v("MOVIE ARRAY", "- I HAVE NO DATA");
-       }
-
-      //  Log.v("HIDE", "BEFORE");
-      //  Log.v("PROGRESS_BAR", String.valueOf(progressBar.hashCode()));
-       progressBar.setVisibility(View.GONE);
-       // this.progressBar.setVisibility(0);
-
-      //  this.progressBar.setVisibility(LinearLayout.GONE);
-
-      //  Log.v("HIDE", "AFTER");
-
-    }
-
+/*
     private List<Movie> getJsonDataArray(String rawJsonStr) throws JSONException{
-        /*  original title
+
             movie poster image thumbnail
             A plot synopsis (called overview in the api)
             user rating (called vote_average in the api)
             release date
-        */
 
 
 
+/*
         final String RESULTS = "results";
         final String ID = "id";
         final String ORIGINAL_TITLE = "original_title";
@@ -447,4 +451,5 @@ public class MainActivityFragment extends Fragment {
 
         return movies;
     }
+    */
 }

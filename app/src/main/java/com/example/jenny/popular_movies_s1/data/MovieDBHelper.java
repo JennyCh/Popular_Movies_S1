@@ -25,6 +25,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_REVIEW_TABLE = "CREATE TABLE " + MovieContract.Review.TABLE_NAME + " (" +
                 MovieContract.Review._ID + " INTEGER NOT NULL, " +
+                MovieContract.Trailer.UNIQUE_TRAILER_ID + " TEXT PRIMARY KEY, " +
                 MovieContract.Review.AUTHOR +  " TEXT NOT NULL, " +
                 MovieContract.Review.CONTENT + " TEXT NOT NULL, " +
 
@@ -34,6 +35,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_TRAILER_TABLE = "CREATE TABLE " + MovieContract.Trailer.TABLE_NAME + " (" +
                 MovieContract.Review._ID + " INTEGER NOT NULL, " +
+                MovieContract.Review.UNIQUE_REVIEW_ID + " TEXT PRIMARY KEY, " +
                 MovieContract.Trailer.KEY + " TEXT NOT NULL, " +
                 MovieContract.Trailer.NAME + " TEXT NOT NULL, " +
                 MovieContract.Trailer.TYPE + " TEXT NOT NULL, " +
@@ -50,7 +52,8 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 MovieContract.Movie.RELEASE_DATE + " TEXT DEFAULT 'NO DATE AVAILABLE'," +
                 MovieContract.Movie.VOTE_AVERAGE + " TEXT DEFAULT 'NO VOTES YET'," +
                 MovieContract.Movie.SORT_TYPE + " INTEGER NOT NULL, " +
-                MovieContract.Movie.FAVORITE + " INTEGER DEFAULT 0 " +
+                MovieContract.Movie.FAVORITE + " INTEGER DEFAULT 0, " +
+                MovieContract.Movie.VOTE_COUNT + " INTEGER DEFAULT 0" +
                 " );";
         Log.v("MovieDBHelper", SQL_CREATE_MOVIE_TABLE);
         Log.v("MovieDBHelper", SQL_CREATE_REVIEW_TABLE);

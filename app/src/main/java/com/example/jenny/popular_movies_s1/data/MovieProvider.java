@@ -172,6 +172,9 @@ public class MovieProvider extends ContentProvider {
         return returnUri;
     }
 
+    /*
+    Only delete those records that were not set FAVORITE
+     */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
 
@@ -179,13 +182,15 @@ public class MovieProvider extends ContentProvider {
         final int match = uriMathcher.match(uri);
         int rowDeleted;
 
-        //if (null == selection) selection = "1";
+/*
+Temp solution to test insert
+ */
         switch (match){
             case MOVIE:
                 rowDeleted = db.delete(MovieContract.Movie.TABLE_NAME, selection, selectionArgs);
                 break;
             case REVIEW:
-                rowDeleted = db.delete(MovieContract.Review.TABLE_NAME,selection,selectionArgs);
+                rowDeleted = db.delete(MovieContract.Review.TABLE_NAME, selection,selectionArgs);
                 break;
             case TRAILER:
                 rowDeleted = db.delete(MovieContract.Trailer.TABLE_NAME,selection,selectionArgs);
@@ -194,6 +199,21 @@ public class MovieProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
+        //if (null == selection) selection = "1";
+  /*      switch (match){
+            case MOVIE:
+                rowDeleted = db.delete(MovieContract.Movie.TABLE_NAME, MovieContract.Movie._ID + " != ?", selectionArgs);
+                break;
+            case REVIEW:
+                rowDeleted = db.delete(MovieContract.Review.TABLE_NAME, MovieContract.Review._ID + " != ?",selectionArgs);
+                break;
+            case TRAILER:
+                rowDeleted = db.delete(MovieContract.Trailer.TABLE_NAME,MovieContract.Trailer._ID + " != ?",selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }*/
+
         if (rowDeleted != 0){
             getContext().getContentResolver().notifyChange(uri, null);
         }
@@ -201,6 +221,9 @@ public class MovieProvider extends ContentProvider {
 
     }
 
+    /*
+    I will only ever need an update for the movie with ID if it ever selected favorite
+     */
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
@@ -210,7 +233,7 @@ public class MovieProvider extends ContentProvider {
 
         switch (match){
             case MOVIE_WITH_ID:{
-                rowUpdated = db.update(MovieContract.Movie.TABLE_NAME,values,selection,selectionArgs);
+                rowUpdated = db.update(MovieContract.Movie.TABLE_NAME,values,MovieContract.Movie._ID + " = ?",selectionArgs);
                 break;
             }
             default:
@@ -232,12 +255,12 @@ public class MovieProvider extends ContentProvider {
         switch (match){
             case MOVIE:
                 db.beginTransaction();
-                int returnCount = 0;
+                int movieRowsInserted = 0;
                 try {
                     for (ContentValues value : values) {
                         long result = db.insert(MovieContract.Movie.TABLE_NAME, null, value);
                         if (result != -1) {
-                            returnCount++;
+                            movieRowsInserted++;
                         }
                     }
                     db.setTransactionSuccessful();
@@ -246,7 +269,39 @@ public class MovieProvider extends ContentProvider {
                 }
 
                 getContext().getContentResolver().notifyChange(uri,null);
-                return returnCount;
+                return movieRowsInserted;
+            case TRAILER:
+                db.beginTransaction();
+                int trailerRowsInserted = 0;
+                try{
+                    for(ContentValues value: values){
+                        long result = db.insert(MovieContract.Trailer.TABLE_NAME, null, value);
+                        if (result != -1){
+                            trailerRowsInserted++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                }finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return trailerRowsInserted;
+            case REVIEW:
+                db.beginTransaction();
+                int reviewRowsInserted = 0;
+                try{
+                    for (ContentValues value: values){
+                        long result = db.insert(MovieContract.Review.TABLE_NAME, null, value);
+                        if (result != -1){
+                            reviewRowsInserted++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                }finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return reviewRowsInserted;
             default:{
 
             }
