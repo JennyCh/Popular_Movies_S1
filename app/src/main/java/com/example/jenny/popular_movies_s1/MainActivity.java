@@ -22,6 +22,9 @@ public class MainActivity extends ActionBarActivity {
 
     public List<Movie> movies;
     private boolean twoPane;
+    private final String MOVIEFRAGMENT_TAG = "MFTAG";
+
+    private String sortType;
 
     // public ProgressBar progressBar;
 
@@ -29,6 +32,10 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /*if(savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container, new MainActivityFragment(), MOVIEFRAGMENT_TAG).commit();
+        }*/
    /*     if(findViewById(R.id.movie_detail_container) != null){
 
             twoPane = true;
@@ -44,7 +51,12 @@ public class MainActivity extends ActionBarActivity {
         //this.progressBar = (ProgressBar) findViewById(R.id.progress_bar);
     }
 
+ /*   @Override
+    protected void onResume() {
+        super.onResume();
 
+        String sortType =
+    }*/
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

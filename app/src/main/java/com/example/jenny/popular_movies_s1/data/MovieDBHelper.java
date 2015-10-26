@@ -12,7 +12,7 @@ import com.example.jenny.popular_movies_s1.Review;
  */
 public class MovieDBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 9;
     static final String DATABASE_NAME = "movie.db";
 
     //Log.v
@@ -25,7 +25,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_REVIEW_TABLE = "CREATE TABLE " + MovieContract.Review.TABLE_NAME + " (" +
                 MovieContract.Review._ID + " INTEGER NOT NULL, " +
-                MovieContract.Trailer.UNIQUE_TRAILER_ID + " TEXT PRIMARY KEY, " +
+                MovieContract.Review.UNIQUE_REVIEW_ID + " TEXT PRIMARY KEY, " +
                 MovieContract.Review.AUTHOR +  " TEXT NOT NULL, " +
                 MovieContract.Review.CONTENT + " TEXT NOT NULL, " +
 
@@ -34,11 +34,13 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 ");";
 
         final String SQL_CREATE_TRAILER_TABLE = "CREATE TABLE " + MovieContract.Trailer.TABLE_NAME + " (" +
-                MovieContract.Review._ID + " INTEGER NOT NULL, " +
-                MovieContract.Review.UNIQUE_REVIEW_ID + " TEXT PRIMARY KEY, " +
+                MovieContract.Trailer._ID + " INTEGER NOT NULL, " +
+                MovieContract.Trailer.UNIQUE_TRAILER_ID + " TEXT PRIMARY KEY, " +
                 MovieContract.Trailer.KEY + " TEXT NOT NULL, " +
                 MovieContract.Trailer.NAME + " TEXT NOT NULL, " +
                 MovieContract.Trailer.TYPE + " TEXT NOT NULL, " +
+                MovieContract.Trailer.SIZE + " INTEGER, " +
+
 
                 " FOREIGN KEY (" + MovieContract.Trailer._ID + ") REFERENCES " +
                 MovieContract.Trailer.TABLE_NAME + " (" + MovieContract.Movie._ID + ")" +

@@ -118,7 +118,7 @@ public class DownloadJsonReviewTask extends AsyncTask <String, Void, Void> {
 
                 JSONObject object = jsonArray.getJSONObject(i);
 
-                int uniqueID = object.getInt(UNIQUE_ID);
+                String uniqueID = object.getString(UNIQUE_ID);
                 String author = object.getString(AUTHOR);
                 String content = object.getString(CONTENT);
 
@@ -134,9 +134,9 @@ public class DownloadJsonReviewTask extends AsyncTask <String, Void, Void> {
             Log.d(LOG_TAG, "BEFORE INSERT");
             int inserted = 0;
             if (reviewVector.size() > 0) {
-                ContentValues[] movieArray = new ContentValues[reviewVector.size()];
-                reviewVector.toArray(movieArray);
-                inserted = mContext.getContentResolver().bulkInsert(MovieContract.Movie.CONTENT_URI, movieArray);
+                ContentValues[] reviewArray = new ContentValues[reviewVector.size()];
+                reviewVector.toArray(reviewArray);
+                inserted = mContext.getContentResolver().bulkInsert(MovieContract.Review.CONTENT_URI, reviewArray);
             }
             Log.d(LOG_TAG, "Complete " + inserted + " inserted");
         }catch (JSONException e){

@@ -40,59 +40,62 @@ public class DownloadJsonTrailerTask extends AsyncTask<String, Void, Void> {
         String reviewJsonStr = null;
 
         movieID = params[0];
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("http://api.themoviedb.org/3/movie/");
-        stringBuilder.append(movieID);
-        stringBuilder.append("/videos?api_key=25fce2cd7e460dfabda689d0ebfcf69f");
+        if (!"245891".equals(movieID)) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("http://api.themoviedb.org/3/movie/");
+            stringBuilder.append(movieID);
+            stringBuilder.append("/videos?api_key=25fce2cd7e460dfabda689d0ebfcf69f");
 
+            if (!"38693".equals(movieID)) {
+                try {
+                    URL url = new URL(stringBuilder.toString());
 
-        try{
-            URL url = new URL(stringBuilder.toString());
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    urlConnection.connect(); // cannot be done on the main thread
 
-            urlConnection  =  (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect(); // cannot be done on the main thread
+                    InputStream inputStream = urlConnection.getInputStream();
+                    StringBuffer buffer = new StringBuffer();
+                    if (inputStream == null) {
+                        return null;
+                    }
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        buffer.append(line + "\n");
+                    }
+                    if (buffer.length() == 0) {
+                        return null;
+                    }
+                    reviewJsonStr = buffer.toString();
 
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if(inputStream == null){
-                return null;
-            }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-            String line;
-            while((line = reader.readLine()) != null){
-                buffer.append(line + "\n");
-            }
-            if(buffer.length() == 0){
-                return null;
-            }
-            reviewJsonStr = buffer.toString();
+                    getTrailerDataFromJson(reviewJsonStr);
 
-            getReviewDataFromJson(reviewJsonStr);
-
-        }catch(IOException e){
-            Log.e(LOG_TAG, "Error", e);
-            return null;
-        }catch(JSONException e){
-            Log.e(LOG_TAG, e.getMessage(),e);
-            e.printStackTrace();
-        }
-        finally {
-            if(urlConnection  != null){
-                urlConnection.disconnect();
-            }
-            if(reader  != null){
-                try{
-                    reader.close();
-                }catch(final IOException e){
-                    Log.e(LOG_TAG, "Error closing stream", e);
+                } catch (IOException e) {
+                    Log.e(LOG_TAG, "Error", e);
+                    return null;
+                } catch (JSONException e) {
+                    Log.e(LOG_TAG, e.getMessage(), e);
+                    e.printStackTrace();
+                } finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (final IOException e) {
+                            Log.e(LOG_TAG, "Error closing stream", e);
+                        }
+                    }
                 }
             }
         }
-        return null;
-    }
+            return null;
+        }
 
-    private void getReviewDataFromJson (String movieJsonString) throws JSONException{
+
+    private void getTrailerDataFromJson (String movieJsonString) throws JSONException{
         final String OBJECT = "object";
         final String RESULTS = "results";
 
@@ -117,7 +120,7 @@ public class DownloadJsonTrailerTask extends AsyncTask<String, Void, Void> {
 
                 JSONObject object = jsonArray.getJSONObject(i);
 
-                int uniqueID = object.getInt(UNIQUE_ID);
+                String uniqueID = object.getString(UNIQUE_ID);
                 String key = object.getString(KEY);
                 String name = object.getString(NAME);
                 String size = object.getString(SIZE);
@@ -137,9 +140,9 @@ public class DownloadJsonTrailerTask extends AsyncTask<String, Void, Void> {
             Log.d(LOG_TAG, "BEFORE INSERT");
             int inserted = 0;
             if (trailerVector.size() > 0) {
-                ContentValues[] movieArray = new ContentValues[trailerVector.size()];
-                trailerVector.toArray(movieArray);
-                inserted = mContext.getContentResolver().bulkInsert(MovieContract.Movie.CONTENT_URI, movieArray);
+                ContentValues[] trailerArray = new ContentValues[trailerVector.size()];
+                trailerVector.toArray(trailerArray);
+                inserted = mContext.getContentResolver().bulkInsert(MovieContract.Trailer.CONTENT_URI, trailerArray);
             }
             Log.d(LOG_TAG, "Complete " + inserted + " inserted");
         }catch (JSONException e){

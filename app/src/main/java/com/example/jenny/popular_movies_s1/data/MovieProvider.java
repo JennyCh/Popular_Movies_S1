@@ -106,12 +106,12 @@ public class MovieProvider extends ContentProvider {
             }
             case TRAILER_WITH_ID:{
                 Log.v("MovieProvider QUERY", "TRAILER WITH ID");
-                cursor = dbHelper.getReadableDatabase().query(MovieContract.Review.TABLE_NAME,null, MovieContract.Review._ID + " = ?",selectionArgs, null,null,sortOrder);
+                cursor = dbHelper.getReadableDatabase().query(MovieContract.Trailer.TABLE_NAME,null, MovieContract.Trailer._ID + " = ?",selectionArgs, null,null,sortOrder);
                 break;
             }
             case TRAILER:{
                 Log.v("MovieProvider QUERY", "TRAILER");
-                cursor = dbHelper.getReadableDatabase().query(MovieContract.Review.TABLE_NAME,null, selection,selectionArgs, null,null,sortOrder);
+                cursor = dbHelper.getReadableDatabase().query(MovieContract.Trailer.TABLE_NAME,null, selection,selectionArgs, null,null,sortOrder);
                 break;
             }
             default: {

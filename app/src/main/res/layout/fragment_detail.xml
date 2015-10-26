@@ -1,11 +1,199 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation=    "vertical"
+    android:layout_width=    "fill_parent"
+    android:layout_height=    "wrap_content"
+    android:background="@color/black">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_title"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_overview"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_date"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_vote"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_voteNum"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_path"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_favorite"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+
+            />
+
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_author1"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_review1"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_author2"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_review2"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_author3"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_review3"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+
+            />
+
+
+
+
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_trailerName1"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_trailer1"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_trailerName2"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_trailer2"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_trailerName3"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:id="@+id/detail_trailer3"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+
+            />
+    </LinearLayout>
+
+
+</RelativeLayout>
+
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation=    "vertical"
     android:layout_width=    "fill_parent"
     android:layout_height=    "wrap_content"
     android:background="@color/black"
-    >
-
+    >-->
+<!--
+<TextView
+    android:text="red"
+    android:gravity="left"
+    android:textColor="@color/white"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:padding="8dp"
+    android:textSize="16pt"
+    android:id="@+id/detail_overview"
+    android:background="@color/black"
+    xmlns:android="http://schemas.android.com/apk/res/android" />-->
+<!--
     <LinearLayout
         android:orientation=    "horizontal"
         android:layout_width=    "fill_parent"
@@ -103,6 +291,7 @@
                 android:paddingBottom="20dp"/>
         </ScrollView>
 
-    </LinearLayout>
+    </LinearLayout>-->
 
-</LinearLayout>
+<!--
+</LinearLayout>-->
