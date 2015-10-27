@@ -4,7 +4,9 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -20,43 +22,48 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
 
-    public List<Movie> movies;
-    private boolean twoPane;
+    //public List<Movie> movies;
+   // private boolean twoPane;
+   // Context context;
     private final String MOVIEFRAGMENT_TAG = "MFTAG";
-
+    private SharedPreferences prefs;
     private String sortType;
-
-    // public ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v("MainActivity", "onCreate");
         setContentView(R.layout.activity_main);
 
-        /*if(savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container, new MainActivityFragment(), MOVIEFRAGMENT_TAG).commit();
-        }*/
-   /*     if(findViewById(R.id.movie_detail_container) != null){
+        if (savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction().add(R.id.container, new MainActivityFragment(), MOVIEFRAGMENT_TAG).commit();
+        }
 
-            twoPane = true;
-
-            if (savedInstanceState == null){
-                getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, new DetailActivityFragment()).commit();
-            }
-        }else{
-            twoPane = false;
-        }*/
+        prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        /*this.sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
+        */
 
 
-        //this.progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+
+
     }
 
- /*   @Override
+    @Override
     protected void onResume() {
         super.onResume();
+        Log.v("MainActivity", "onResume");
+        String sort = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
 
-        String sortType =
-    }*/
+        Log.v("MainActivity", sort + " | " + sortType);
+        if(sort != null && !sort.equals(this.sortType)){
+            MainActivityFragment mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
+            if(null != mainActivityFragment){
+                Log.v("MainActivity", "onSortChange");
+                mainActivityFragment.onSortChange();
+            }
+        }
+        this.sortType = sort;
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -68,10 +75,6 @@ public class MainActivity extends ActionBarActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -2,6 +2,7 @@ package com.example.jenny.popular_movies_s1;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -18,6 +19,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -109,77 +111,98 @@ public class DownloadJsonDataTask extends AsyncTask<String,Void,Void> {
 
         /*
         Temp solution so not to run into PK constraint
-         */
+         *//*
         mContext.getContentResolver().delete(MovieContract.Trailer.CONTENT_URI, null, null);
         mContext.getContentResolver().delete(MovieContract.Review.CONTENT_URI, null, null);
-        mContext.getContentResolver().delete(MovieContract.Movie.CONTENT_URI, null, null);
+        mContext.getContentResolver().delete(MovieContract.Movie.CONTENT_URI, null, null);*/
 
-        try {
-            JSONObject moviesObj = new JSONObject(movieJsonString);
-            JSONArray jsonArray = moviesObj.getJSONArray(RESULTS);
-            //
+        Cursor cursor = mContext.getContentResolver().query(MovieContract.Movie.CONTENT_URI, new String[]{MovieContract.Movie._ID}, null,null,MovieContract.Movie._ID);
 
-            Vector<ContentValues> movieVector = new Vector<>(jsonArray.length());
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                ContentValues movieValues = new ContentValues();
-
-                JSONObject object = jsonArray.getJSONObject(i);
-                    int id = object.getInt(ID);
-                    String title = object.getString(ORIGINAL_TITLE);
-                    String path = object.getString(PATH);
-                    String overview = object.getString(OVERVIEW);
-                    double vote = object.getDouble(VOTE_AVERAGE);
-                    String releaseDate = object.getString(RELEASE_DATE);
-                int voteCount = object.getInt(VOTE_COUNT);
-                int sort;
-
-                if ("popularity".equals(sortType)){
-                    sort = 1;
-                }else if("vote_average".equals(sortType)){
-                    sort = 2;
-                }else{
-                    sort = -1;
-                }
-
-
-                movieValues.put(MovieContract.Movie._ID, id);
-                movieValues.put(MovieContract.Movie.TITLE, title);
-                movieValues.put(MovieContract.Movie.POSTER_PATH, path);
-                movieValues.put(MovieContract.Movie.OVERVIEW, overview);
-                movieValues.put(MovieContract.Movie.VOTE_AVERAGE, vote);
-                movieValues.put(MovieContract.Movie.RELEASE_DATE, releaseDate);
-                movieValues.put(MovieContract.Movie.VOTE_COUNT, voteCount);
-                movieValues.put(MovieContract.Movie.SORT_TYPE, sort);
-                movieVector.add(movieValues);
-
-                /*
-                Load Reviews and Trailers for each movie
-                 */
-                DownloadJsonReviewTask downloadReview = new DownloadJsonReviewTask(mContext);
-                downloadReview.execute(String.valueOf(id));
-
-                DownloadJsonTrailerTask trailerReview = new DownloadJsonTrailerTask(mContext);
-                trailerReview.execute(String.valueOf(id));
-
-
-            }
-            Log.d("DownloadJsonDataTask", "BEFORE INSERT");
-            int inserted = 0;
-            if (movieVector.size() > 0) {
-                ContentValues[] movieArray = new ContentValues[movieVector.size()];
-                movieVector.toArray(movieArray);
-                inserted = mContext.getContentResolver().bulkInsert(MovieContract.Movie.CONTENT_URI, movieArray);
-            }
-
-
-
-            Log.d("DownloadJsonDataTask", "Complete " + inserted + " inserted");
-        }catch (JSONException e){
-            Log.e("DownloadJsonDataTask", e.getMessage(), e);
-            e.printStackTrace();
+        int idColumn = cursor.getColumnIndex(MovieContract.Movie._ID);
+        List<Integer> idList = new ArrayList<>();
+        while(cursor.moveToNext()){
+            idList.add(cursor.getInt(idColumn));
         }
+
+        boolean exists = false;
+
+
+
+
+            try {
+                JSONObject moviesObj = new JSONObject(movieJsonString);
+                JSONArray jsonArray = moviesObj.getJSONArray(RESULTS);
+                //
+
+                Vector<ContentValues> movieVector = new Vector<>(jsonArray.length());
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    ContentValues movieValues = new ContentValues();
+
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    int id = object.getInt(ID);
+
+                    for (int j = 0; j < idList.size(); j++) {
+                        if (idList.get(j) == id) {
+                            exists = true;
+                            idList.remove(j);
+                        }
+                    }
+                    if (!exists) {
+                        String title = object.getString(ORIGINAL_TITLE);
+                        String path = object.getString(PATH);
+                        String overview = object.getString(OVERVIEW);
+                        double vote = object.getDouble(VOTE_AVERAGE);
+                        String releaseDate = object.getString(RELEASE_DATE);
+                        int voteCount = object.getInt(VOTE_COUNT);
+                        int sort;
+
+                        if ("popularity".equals(sortType)) {
+                            sort = 1;
+                        } else if ("vote_average".equals(sortType)) {
+                            sort = 2;
+                        } else {
+                            sort = -1;
+                        }
+
+
+                        movieValues.put(MovieContract.Movie._ID, id);
+                        movieValues.put(MovieContract.Movie.TITLE, title);
+                        movieValues.put(MovieContract.Movie.POSTER_PATH, path);
+                        movieValues.put(MovieContract.Movie.OVERVIEW, overview);
+                        movieValues.put(MovieContract.Movie.VOTE_AVERAGE, vote);
+                        movieValues.put(MovieContract.Movie.RELEASE_DATE, releaseDate);
+                        movieValues.put(MovieContract.Movie.VOTE_COUNT, voteCount);
+                        movieValues.put(MovieContract.Movie.SORT_TYPE, sort);
+                        movieVector.add(movieValues);
+
+                        /*
+                        Load Reviews and Trailers for each movie
+                         */
+                        DownloadJsonReviewTask downloadReview = new DownloadJsonReviewTask(mContext);
+                        downloadReview.execute(String.valueOf(id));
+
+                        DownloadJsonTrailerTask trailerReview = new DownloadJsonTrailerTask(mContext);
+                        trailerReview.execute(String.valueOf(id));
+
+
+                        Log.d("DownloadJsonDataTask", "BEFORE INSERT");
+                        int inserted = 0;
+                        if (movieVector.size() > 0) {
+                            ContentValues[] movieArray = new ContentValues[movieVector.size()];
+                            movieVector.toArray(movieArray);
+                            inserted = mContext.getContentResolver().bulkInsert(MovieContract.Movie.CONTENT_URI, movieArray);
+                        }
+
+
+                        Log.d("DownloadJsonDataTask", "Complete " + inserted + " inserted");
+                    }
+                }
+            } catch (JSONException e) {
+                Log.e("DownloadJsonDataTask", e.getMessage(), e);
+                e.printStackTrace();
+            }
 
     }
 }

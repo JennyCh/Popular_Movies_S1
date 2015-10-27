@@ -15,7 +15,7 @@
         android:visibility="visible"
         />
 
-    <ListView
+<!--    <ListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/gridview"
@@ -23,8 +23,7 @@
         android:layout_below="@+id/progress_bar"
         >
 
-    </ListView>
-    <!--
+    </ListView>-->
     <GridView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridview"
         android:layout_width="match_parent"
@@ -41,6 +40,5 @@
         android:columnWidth="165dp"
 
         />
--->
 
 </RelativeLayout>

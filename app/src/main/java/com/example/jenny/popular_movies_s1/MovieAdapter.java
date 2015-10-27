@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jenny.popular_movies_s1.data.MovieContract;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by Jenny on 10/25/2015.
@@ -22,13 +23,13 @@ public class MovieAdapter extends CursorAdapter {
     public MovieAdapter(Context context, Cursor c, int flags) {
 
         super(context, c, flags);
-        Log.v(LOG_TAG, "constructor");
+        //Log.v(LOG_TAG, "constructor");
 
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        Log.v(LOG_TAG, "new view");
+        //Log.v(LOG_TAG, "new view");
         View view = LayoutInflater.from(context).inflate(R.layout.item_layout, parent, false);
 
         return view;
@@ -36,16 +37,24 @@ public class MovieAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        Log.v(LOG_TAG, "bind view");
-        TextView textView = (TextView) view;
+        //Log.v(LOG_TAG, "bind view");
+       // TextView textView = (TextView) view;
+        ImageView imageView = (ImageView) view;
         String data = formatData(cursor);
-        Log.v(LOG_TAG, data);
-        textView.setText(formatData(cursor));
+       // Log.v(LOG_TAG, data);
+
+
+        String baseUrl = "http://image.tmdb.org/t/p/w342";
+        String url = baseUrl + data;
+
+        Picasso.with(context).load(url.toString()).into(imageView);
+
+        //textView.setText(formatData(cursor));
     }
 
     private String formatData(Cursor cursor){
         int poster_path = cursor.getColumnIndex(MovieContract.Movie.POSTER_PATH);
         int title = cursor.getColumnIndex(MovieContract.Movie.TITLE);
-        return cursor.getString(title);
+        return cursor.getString(poster_path);
     }
 }

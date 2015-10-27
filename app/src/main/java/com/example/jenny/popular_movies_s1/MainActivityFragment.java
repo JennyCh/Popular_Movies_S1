@@ -78,6 +78,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private ProgressBar progressBar;
     private View v;
     private View view;
+    private SharedPreferences prefs;
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -93,7 +94,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         }else{
             sort = "-1";
         }
-        Log.v(LOG_TAG, sort);
+        Log.v(LOG_TAG + " CL", sort);
         return new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.SORT_TYPE + " = ?", new String[]{sort}, MovieContract.Movie.TITLE + " ASC");
     }
 
@@ -110,6 +111,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     public MainActivityFragment() {
         this.sortTypeSaved = "";
+
     }
 
     @Override
@@ -151,15 +153,16 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         mMovieAdapter = new MovieAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container,false);
-        ListView listView = (ListView) rootView.findViewById(R.id.gridview);
-        listView.setAdapter(mMovieAdapter);
+        //ListView listView = (ListView) rootView.findViewById(R.id.gridview);
+        GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
+        gridView.setAdapter(mMovieAdapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
 
-                if (cursor != null){
+                if (cursor != null) {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     String sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
 
@@ -171,7 +174,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                     DownloadJsonTrailerTask trailerReview = new DownloadJsonTrailerTask(getContext());
                     trailerReview.execute(String.valueOf(cursor.getInt(id)));*/
 
-                    Intent intent = new Intent(getActivity(), DetailActivity.class )
+                    Intent intent = new Intent(getActivity(), DetailActivity.class)
                             .setData(MovieContract.Movie.buildMovieID(cursor.getInt(id)));
                     startActivity(intent);
                 }
@@ -181,35 +184,47 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         return rootView;
     }
 
+
+
     void onSortChange(){
-        //update();
+        Log.v(LOG_TAG, "onSortChange");
+        update();
         getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
 
     private void update(){
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Log.v(LOG_TAG, "update");
+        this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
-Log.v(LOG_TAG, sortType);
-
-        if (!sortTypeSaved.equals(sortType)){
-            onSortChange();
-            sortTypeSaved = sortType;
-        }
+Log.v(LOG_TAG + "UPD", sortType);
 
         DownloadJsonDataTask asyncDownload = new DownloadJsonDataTask(getContext());
+
         asyncDownload.execute(sortType);
 
         //sortTypeSaved = sortType;
 
     }
 
-    @Override
+/*    @Override
     public void onStart() {
         super.onStart();
+
         Log.v(LOG_TAG, "onStart");
+        this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sort = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
+        Log.v(LOG_TAG, sort + " | " + this.sortTypeSaved);
+        if(sort != null && !sort.equals(this.sortTypeSaved)){
+            Log.v(LOG_TAG, "onSortChange");
+            onSortChange();
+        }
+        this.sortTypeSaved = sort;
+
+
+
+
                 update();
-    }
+    }*/
 
 
 }
