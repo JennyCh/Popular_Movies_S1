@@ -16,10 +16,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -31,6 +33,7 @@ import com.example.jenny.popular_movies_s1.data.MovieContract;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,8 +57,12 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     TextView dateView;
     List<Movie> movies;
 
+    MovieAdapter mMovieAdapter;
+
     Cursor reviewCursor;
     Cursor trailerCursor;
+
+    ListView reviewListView;
 
     String movieID;
     private static final int DETAIL_LOADER = 0;
@@ -132,23 +139,43 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         TextView dateTextView = (TextView) getView().findViewById(R.id.detail_date);
         dateTextView.setText(releaseDataDate);
 
-        TextView pathTextView = (TextView) getView().findViewById(R.id.detail_path);
-        pathTextView.setText(pathData);
+        ImageView pathImageView = (ImageView) getView().findViewById(R.id.detail_movie_poster);
+        String baseUrl = "http://image.tmdb.org/t/p/w342";
+        String url = baseUrl + pathData;
+        Picasso.with(getContext()).load(url.toString()).into(pathImageView);
 
-        TextView voteTextView = (TextView) getView().findViewById(R.id.detail_vote);
-        voteTextView.setText(voteAverageData);
+        /*TextView pathTextView = (TextView) getView().findViewById(R.id.detail_path);
+        pathTextView.setText(pathData);*/
+
+        /*TextView voteTextView = (TextView) getView().findViewById(R.id.detail_vote);
+        voteTextView.setText(voteAverageData);*/
 
         TextView voteNumTextView = (TextView) getView().findViewById(R.id.detail_voteNum);
         voteNumTextView.setText(voteCountData);
 
-        TextView favoriteTextView = (TextView) getView().findViewById(R.id.detail_favorite);
-        favoriteTextView.setText(favoriteData);
+   /*     TextView favoriteTextView = (TextView) getView().findViewById(R.id.detail_favorite);
+        favoriteTextView.setText(favoriteData);*/
 
         if (!reviewCursor.moveToFirst()){
             Log.v(LOG_TAG, "NO DATA REVIEW");
             return;
+        }else{
+            List<Review> reviews = new ArrayList<>();
+            int reviewAuthorColumn = reviewCursor.getColumnIndex(MovieContract.Review.AUTHOR);
+            int reviewContentColumn = reviewCursor.getColumnIndex(MovieContract.Review.CONTENT);
+            while(reviewCursor.moveToNext()){
+                reviews.add(new Review(reviewCursor.getString(reviewAuthorColumn),reviewCursor.getString(reviewContentColumn)));
+            }
+
+            //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.review_item, reviews);
+            ReviewAdapter mReviewAdapter = new ReviewAdapter(getActivity(),reviews);
+            this.reviewListView.setAdapter(mReviewAdapter);
+
         }
 
+
+
+/*
         int author = reviewCursor.getColumnIndex(MovieContract.Review.AUTHOR);
         int content = reviewCursor.getColumnIndex(MovieContract.Review.CONTENT);
 
@@ -159,10 +186,10 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         TextView contentTextView = (TextView) getView().findViewById(R.id.detail_review1);
 
         authorTextView.setText(authorData);
-        contentTextView.setText(contentData);
+        contentTextView.setText(contentData);*/
 
 
-        if (!trailerCursor.moveToFirst()){
+       /* if (!trailerCursor.moveToFirst()){
             Log.v(LOG_TAG, "NO DATA TRAILER");
             return;
         }
@@ -172,7 +199,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         String nameTrailerData = trailerCursor.getString(trailerName);
 
         TextView nameTextView = (TextView) getView().findViewById(R.id.detail_trailerName1);
-        nameTextView.setText(nameTrailerData);
+        nameTextView.setText(nameTrailerData);*/
 
 
     }
@@ -192,9 +219,16 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //mMovieAdapter = new MovieAdapter(getActivity(), null, 0);
+        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+        reviewListView = (ListView) rootView.findViewById(R.id.reviewListView);
+        //ListView trailerListView = (ListView) rootView.findViewById(R.id.trailerListView);
+        //reviewListView.setAdapter(mMovieAdapter);
 
 
-       return inflater.inflate(R.layout.fragment_detail, container, false);
+
+       return rootView;
 
 /*
         String path = intent.getStringExtra("PATH");
