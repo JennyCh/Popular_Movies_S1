@@ -1,3 +1,5 @@
+
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation=    "vertical"
@@ -5,444 +7,169 @@
     android:layout_height=    "wrap_content"
     android:background="@color/white">
 
-<!--
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_title"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_overview"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_date"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_vote"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_voteNum"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_path"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_favorite"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
-
-            />
-
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_author1"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_review1"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_author2"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_review2"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_author3"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_review3"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-
-            />
 
 
 
-
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_trailerName1"
-            android:layout_height="wrap_content"
-            android:background="@color/gray"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_trailer1"
-            android:layout_height="wrap_content"
-            android:background="@color/gray"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_trailerName2"
-            android:layout_height="wrap_content"
-            android:background="@color/gray"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_trailer2"
-            android:layout_height="wrap_content"
-            android:background="@color/gray"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_trailerName3"
-            android:layout_height="wrap_content"
-            android:background="@color/gray"
-
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:id="@+id/detail_trailer3"
-            android:layout_height="wrap_content"
-            android:background="@color/gray"
-
-            />
-    </LinearLayout>
--->
-
-
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView" >
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
-
-            <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:id="@+id/detail_movie_poster"
-                android:src="@drawable/no_poster"
-
-                />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Movie Title"
-                    android:id="@+id/detail_title" />
-
-                <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    >
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageView2"
-                        android:src="@drawable/yellow_star"/>
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:id="@+id/detail_movie_poster"
+                        android:src="@drawable/no_poster"
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageView3"
-                        android:src="@drawable/yellow_star"/>
+                        />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageView4"
-                        android:src="@drawable/yellow_star"/>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageView6"
-                        android:src="@drawable/yellow_star"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:text="Movie Title"
+                            android:id="@+id/detail_title" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageView7"
-                        android:src="@drawable/yellow_star"/>
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageView8"
-                        android:src="@drawable/gray_star"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/star1"
+                                android:src="@drawable/gray_star"/>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageView10"
-                        android:src="@drawable/gray_star"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/star2"
+                                android:src="@drawable/gray_star"/>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageView11"
-                        android:src="@drawable/gray_star"/>
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageView12"
-                        android:src="@drawable/gray_star"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/star3"
+                                android:src="@drawable/gray_star"/>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageView9"
-                        android:src="@drawable/gray_star"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/star4"
+                                android:src="@drawable/gray_star"/>
 
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/star5"
+                                android:src="@drawable/gray_star"/>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/star6"
+                                android:src="@drawable/gray_star"/>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/star7"
+                                android:src="@drawable/gray_star"/>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/star8"
+                                android:src="@drawable/gray_star"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/star9"
+                                android:src="@drawable/gray_star"/>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/star10"
+                                android:src="@drawable/gray_star"/>
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2652"
+                                android:id="@+id/detail_voteNum" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" people voted"
+                                android:id="@+id/textView" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Jan 13th 2016"
+                            android:id="@+id/detail_date" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/imageButton"
+                            android:foregroundGravity="bottom"
+                            android:src="@drawable/heart_love" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                android:id="@+id/detail_overview"
+                android:layout_marginTop="153dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="28dp"
+                android:layout_marginStart="28dp" />
+
+            <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/reviewListView"
+                android:layout_below="@+id/detail_overview"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/trailerListView"
+                android:layout_below="@+id/reviewListView"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2652 people voted"
-                    android:id="@+id/detail_voteNum" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Jan 13th 2016"
-                    android:id="@+id/detail_date" />
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageButton"
-                    android:foregroundGravity="bottom"
-                    android:src="@drawable/heart_love" />
-            </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-        android:id="@+id/detail_overview"
-        android:layout_marginTop="153dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="28dp"
-        android:layout_marginStart="28dp" />
-
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/reviewListView"
-        android:layout_below="@+id/detail_overview"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/trailerListView"
-        android:layout_below="@+id/reviewListView"
-        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
-
-
-
-    <!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation=    "vertical"
-    android:layout_width=    "fill_parent"
-    android:layout_height=    "wrap_content"
-    android:background="@color/black"
-    >-->
-<!--
-<TextView
-    android:text="red"
-    android:gravity="left"
-    android:textColor="@color/white"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:padding="8dp"
-    android:textSize="16pt"
-    android:id="@+id/detail_overview"
-    android:background="@color/black"
-    xmlns:android="http://schemas.android.com/apk/res/android" />-->
-<!--
-    <LinearLayout
-        android:orientation=    "horizontal"
-        android:layout_width=    "fill_parent"
-        android:layout_height=    "wrap_content"
-        android:maxHeight="342dp"
-        >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_image"
-            android:layout_margin="15dp"
-            android:maxHeight="342dp"
-            android:padding="1dp"
-            android:background="@color/gray"
-
-            />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation=    "vertical"
-
-            >
-
-            <TextView
-                android:text=    "red"
-                android:gravity=    "left"
-                android:textColor="@color/white"
-                android:layout_width=    "fill_parent"
-                android:layout_height=    "wrap_content"
-                android:layout_weight="1"
-                android:padding="8dp"
-                android:textSize="16pt"
-                android:id="@+id/detail_title"
-                android:background="@color/black"/>
-
-
-            <TextView
-                android:text=    "red"
-                android:gravity=    "left"
-                android:layout_width=    "fill_parent"
-                android:layout_height=    "wrap_content"
-                android:textColor="@color/orange"
-                android:textSize="16pt"
-                android:textColorHighlight="@color/red"
-                android:layout_weight="1"
-                android:padding="8dp"
-                android:id="@+id/detail_vote"
-                android:background="@color/black"/>
-
-            <TextView
-                android:gravity=    "left"
-                android:textColor="@color/orange"
-                android:textSize="13dp"
-                android:layout_width=    "fill_parent"
-                android:layout_height=    "wrap_content"
-                android:layout_weight="1"
-                android:id="@+id/detail_date"
-                android:padding="8dp"
-                android:background="@color/black"
-                />
-
-
-
-
-
-
-
-        </LinearLayout>
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation=    "vertical"
-        android:layout_width=    "fill_parent"
-        android:layout_height=    "wrap_content"
-        >
-
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:id="@+id/scrollView" >
-
-            <TextView
-                android:textSize=    "12pt"
-                android:textColor="@color/gray"
-                android:background="@color/black"
-                android:layout_width=    "fill_parent"
-                android:layout_height=    "wrap_content"
-                android:id="@+id/detail_overview"
-                android:layout_margin="13dp"
-                android:paddingBottom="20dp"/>
-        </ScrollView>
-
-    </LinearLayout>-->
-
-<!--
-</LinearLayout>-->

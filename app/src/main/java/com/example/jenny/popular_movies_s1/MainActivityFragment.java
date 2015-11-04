@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -192,19 +194,33 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
 
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
+    }
+
     private void update(){
         Log.v(LOG_TAG, "update");
         this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
 Log.v(LOG_TAG + "UPD", sortType);
 
-        DownloadJsonDataTask asyncDownload = new DownloadJsonDataTask(getContext());
 
-        asyncDownload.execute(sortType);
+
+if (isNetworkConnected()) {
+    Log.v("INTERNET", "CONNECTED");
+    DownloadJsonDataTask asyncDownload = new DownloadJsonDataTask(getContext());
+    asyncDownload.execute(sortType);
+}else{
+    Log.v("INTERNET", "NOT CONNECTED");
+}
 
         //sortTypeSaved = sortType;
 
     }
+
+
 
 /*    @Override
     public void onStart() {

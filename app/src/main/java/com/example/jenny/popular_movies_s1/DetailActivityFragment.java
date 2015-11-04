@@ -2,6 +2,7 @@ package com.example.jenny.popular_movies_s1;
 
 
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 
 import android.content.Intent;
@@ -9,19 +10,24 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -36,6 +42,7 @@ import org.json.JSONException;
 import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -63,6 +70,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     Cursor trailerCursor;
 
     ListView reviewListView;
+    ListView trailerListView;
 
     String movieID;
     private static final int DETAIL_LOADER = 0;
@@ -123,7 +131,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         String titleData = data.getString(title);
         String releaseDataDate = data.getString(releaseDate);
         String pathData = data.getString(path);
-        String voteAverageData = data.getString(voteAverage);
+        int voteAverageData = data.getInt(voteAverage);
         String voteCountData = data.getString(voteCount);
         String favoriteData = data.getString(favorite);
 
@@ -150,6 +158,30 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         /*TextView voteTextView = (TextView) getView().findViewById(R.id.detail_vote);
         voteTextView.setText(voteAverageData);*/
 
+        int val =  voteAverageData;
+        if (10 <= val){
+            Picasso.with(getContext()).load(R.drawable.yellow_star).into((ImageView) getView().findViewById(R.id.star10));
+        }
+        if(9 <= val){
+            Picasso.with(getContext()).load(R.drawable.yellow_star).into((ImageView) getView().findViewById(R.id.star9));
+        } if(8 <= val){
+            Picasso.with(getContext()).load(R.drawable.yellow_star).into((ImageView) getView().findViewById(R.id.star8));
+        } if(7 <= val){
+            Picasso.with(getContext()).load(R.drawable.yellow_star).into((ImageView) getView().findViewById(R.id.star7));
+        } if(6 <= val){
+            Picasso.with(getContext()).load(R.drawable.yellow_star).into((ImageView) getView().findViewById(R.id.star6));
+        } if(5 <= val){
+            Picasso.with(getContext()).load(R.drawable.yellow_star).into((ImageView) getView().findViewById(R.id.star5));
+        } if(4 <= val){
+            Picasso.with(getContext()).load(R.drawable.yellow_star).into((ImageView) getView().findViewById(R.id.star4));
+        } if(3 <= val){
+            Picasso.with(getContext()).load(R.drawable.yellow_star).into((ImageView) getView().findViewById(R.id.star3));
+        } if(2 <= val){
+            Picasso.with(getContext()).load(R.drawable.yellow_star).into((ImageView) getView().findViewById(R.id.star2));
+        } if(1 <= val){
+            Picasso.with(getContext()).load(R.drawable.yellow_star).into((ImageView) getView().findViewById(R.id.star1));
+        }
+
         TextView voteNumTextView = (TextView) getView().findViewById(R.id.detail_voteNum);
         voteNumTextView.setText(voteCountData);
 
@@ -163,13 +195,75 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
             List<Review> reviews = new ArrayList<>();
             int reviewAuthorColumn = reviewCursor.getColumnIndex(MovieContract.Review.AUTHOR);
             int reviewContentColumn = reviewCursor.getColumnIndex(MovieContract.Review.CONTENT);
-            while(reviewCursor.moveToNext()){
+            int count = reviewCursor.getCount();
+
+            for(int i = 0; i < count; i ++){
                 reviews.add(new Review(reviewCursor.getString(reviewAuthorColumn),reviewCursor.getString(reviewContentColumn)));
+                reviewCursor.moveToNext();
             }
 
             //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.review_item, reviews);
             ReviewAdapter mReviewAdapter = new ReviewAdapter(getActivity(),reviews);
             this.reviewListView.setAdapter(mReviewAdapter);
+
+        }
+
+        if (!trailerCursor.moveToFirst()){
+            Log.v(LOG_TAG, "NO DATA TRAILER");
+            return;
+        }else{
+            final List<Trailer> trailers = new ArrayList<>();
+            int trailerNameColumn = trailerCursor.getColumnIndex(MovieContract.Trailer.NAME);
+            int trailerTypeColumn = trailerCursor.getColumnIndex(MovieContract.Trailer.TYPE);
+            int trailerSizeColumn = trailerCursor.getColumnIndex(MovieContract.Trailer.SIZE);
+            int trailerKeyColumn = trailerCursor.getColumnIndex(MovieContract.Trailer.KEY);
+
+
+
+
+
+            int count = trailerCursor.getCount();
+
+            for(int i = 0; i < count; i ++){
+                trailers.add(new Trailer(trailerCursor.getString(trailerNameColumn), 
+                                            trailerCursor.getString(trailerSizeColumn), 
+                                            trailerCursor.getString(trailerTypeColumn), 
+                                            trailerCursor.getString(trailerKeyColumn)));
+
+                //final String key = trailerCursor.getString(trailerKeyColumn);
+
+                final StringBuilder link = new StringBuilder();
+                //
+
+                this.trailerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                         String key = trailers.get(position).getKey();
+
+                        link.append("https://www.youtube.com/watch?v=");
+                        link.append(key);
+                        Log.v("ON CLICK LINK YOUTUBE ", link.toString());
+                        try {
+                            //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link.toString())));
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link.toString()));
+                            startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link.toString()));
+                            startActivity(intent);
+                        }
+                        link.delete(0, link.length());
+                    }
+                });
+
+                trailerCursor.moveToNext();
+            }
+            TrailerAdapter mTrailerAdapter = new TrailerAdapter(getActivity(), trailers);
+            this.trailerListView.setAdapter(mTrailerAdapter);
+
+
+
+
 
         }
 
@@ -223,6 +317,10 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
         reviewListView = (ListView) rootView.findViewById(R.id.reviewListView);
+        trailerListView = (ListView) rootView.findViewById(R.id.trailerListView);
+
+
+
         //ListView trailerListView = (ListView) rootView.findViewById(R.id.trailerListView);
         //reviewListView.setAdapter(mMovieAdapter);
 
@@ -260,6 +358,8 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
         //return rootView;
     }
+
+
 /*
     public class DownloadSingleImage extends AsyncTask<String,Void,Bitmap> {
         private ImageView btmImage;

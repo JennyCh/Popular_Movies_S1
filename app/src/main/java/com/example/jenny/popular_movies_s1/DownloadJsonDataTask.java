@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.jenny.popular_movies_s1.data.MovieContract;
+import com.squareup.picasso.Downloader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -135,20 +136,25 @@ public class DownloadJsonDataTask extends AsyncTask<String,Void,Void> {
                 //
 
                 Vector<ContentValues> movieVector = new Vector<>(jsonArray.length());
-
+                int id;
                 for (int i = 0; i < jsonArray.length(); i++) {
 
                     ContentValues movieValues = new ContentValues();
 
                     JSONObject object = jsonArray.getJSONObject(i);
-                    int id = object.getInt(ID);
+                    id = object.getInt(ID);
 
+                    Log.v("LIST SIZE", String.valueOf(idList.size()));
                     for (int j = 0; j < idList.size(); j++) {
+                        Log.v(String.valueOf(idList.get(j)), String.valueOf(id));
                         if (idList.get(j) == id) {
                             exists = true;
                             idList.remove(j);
+                            break;
                         }
+
                     }
+                    Log.v("INSERT MOVIE ID", String.valueOf(id));
                     if (!exists) {
                         String title = object.getString(ORIGINAL_TITLE);
                         String path = object.getString(PATH);

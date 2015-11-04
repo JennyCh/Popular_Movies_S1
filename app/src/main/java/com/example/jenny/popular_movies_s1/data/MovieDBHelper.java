@@ -12,7 +12,7 @@ import com.example.jenny.popular_movies_s1.Review;
  */
 public class MovieDBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     static final String DATABASE_NAME = "movie.db";
 
     //Log.v
