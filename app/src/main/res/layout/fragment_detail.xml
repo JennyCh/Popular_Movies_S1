@@ -132,12 +132,13 @@
                             android:text="Jan 13th 2016"
                             android:id="@+id/detail_date" />
 
-                        <ImageButton
+                        <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/imageButton"
-                            android:foregroundGravity="bottom"
-                            android:src="@drawable/heart_love" />
+                            android:id="@+id/like"
+                            android:src="@drawable/heart_love"/>
+
+
                     </LinearLayout>
 
                 </LinearLayout>

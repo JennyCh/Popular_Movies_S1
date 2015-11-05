@@ -3,6 +3,7 @@ package com.example.jenny.popular_movies_s1;
 
 
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 
 import android.content.Intent;
@@ -118,14 +119,14 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         }
 
 
-
+        int movieId = data.getColumnIndex(MovieContract.Movie._ID);
         int overview =  data.getColumnIndex(MovieContract.Movie.OVERVIEW);
         int title = data.getColumnIndex(MovieContract.Movie.TITLE);
         int releaseDate = data.getColumnIndex(MovieContract.Movie.RELEASE_DATE);
         int path = data.getColumnIndex(MovieContract.Movie.POSTER_PATH);
         int voteAverage = data.getColumnIndex(MovieContract.Movie.VOTE_AVERAGE);
         int voteCount = data.getColumnIndex(MovieContract.Movie.VOTE_COUNT);
-        int favorite = data.getColumnIndex(MovieContract.Movie.FAVORITE);
+        final int favorite = data.getColumnIndex(MovieContract.Movie.FAVORITE);
 
         String overviewData = data.getString(overview);
         String titleData = data.getString(title);
@@ -133,11 +134,13 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         String pathData = data.getString(path);
         int voteAverageData = data.getInt(voteAverage);
         String voteCountData = data.getString(voteCount);
-        String favoriteData = data.getString(favorite);
+        //String favoriteData = data.getString(favorite);
+        final String idData = data.getString(movieId);
+         final int favoriteData = data.getInt(favorite);
 
         //String result = titleData + " | " + overviewData + " | " + releaseDataDate + " | " + pathData + " | " + voteAverageData + " | " + voteCountData;
 
-        //Log.v(LOG_TAG, overviewData);
+        Log.v(LOG_TAG, "FAVORITE " + String.valueOf(favoriteData));
         TextView titleTextView = (TextView) getView().findViewById(R.id.detail_title);
         titleTextView.setText(titleData);
 
@@ -152,11 +155,34 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         String url = baseUrl + pathData;
         Picasso.with(getContext()).load(url.toString()).into(pathImageView);
 
-        /*TextView pathTextView = (TextView) getView().findViewById(R.id.detail_path);
-        pathTextView.setText(pathData);*/
+        final ImageView likeImage = (ImageView) getView().findViewById(R.id.like);
+        if(favoriteData == 1){
+            Picasso.with(getContext()).load(R.drawable.heart_blue).into(likeImage);
+        } else{
+            Picasso.with(getContext()).load(R.drawable.heart_love).into(likeImage);
+        }
+        likeImage.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Uri uri = MovieContract.Movie.buildMovieID(Integer.valueOf(idData));
+                ContentValues updateValues = new ContentValues();
+                //if favoriteData == 1 ? favoriteData = 0 : favoriteData = 1;
+                int favoriteValue;
+                if(favoriteData == 1){
+                    favoriteValue = 0;
+                    Picasso.with(getContext()).load(R.drawable.heart_love).into(likeImage);
+                } else{
+                    favoriteValue = 1;
+                    Picasso.with(getContext()).load(R.drawable.heart_blue).into(likeImage);
+                }
 
-        /*TextView voteTextView = (TextView) getView().findViewById(R.id.detail_vote);
-        voteTextView.setText(voteAverageData);*/
+
+                updateValues.put(MovieContract.Movie.FAVORITE, favoriteValue);
+                getContext().getContentResolver().update(uri, updateValues, null, new String[]{idData});
+                Log.v(LOG_TAG, "UPDATED FAVORITE");
+            }
+        });
+
 
         int val =  voteAverageData;
         if (10 <= val){

@@ -87,17 +87,20 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         Log.v(LOG_TAG, "CREATING LOADER");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
-
+        CursorLoader cursor;
         String sort;
         if ("popularity".equals(sortType)){
             sort = "1";
+            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.SORT_TYPE + " = ?", new String[]{sort}, MovieContract.Movie.TITLE + " ASC");
         }else if("vote_average".equals(sortType)){
             sort = "2";
+            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.SORT_TYPE + " = ?", new String[]{sort}, MovieContract.Movie.TITLE + " ASC");
         }else{
             sort = "-1";
+            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.FAVORITE + " = ?", new String[]{"1"}, MovieContract.Movie.TITLE + " ASC");
         }
         Log.v(LOG_TAG + " CL", sort);
-        return new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.SORT_TYPE + " = ?", new String[]{sort}, MovieContract.Movie.TITLE + " ASC");
+        return cursor;
     }
 
     @Override
