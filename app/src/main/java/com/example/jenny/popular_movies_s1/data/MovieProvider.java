@@ -16,6 +16,8 @@ import com.example.jenny.popular_movies_s1.Movie;
  */
 public class MovieProvider extends ContentProvider {
 
+    private static final String LOG_TAG =  "MovieProvider";
+
     private static final UriMatcher uriMathcher = buildUriMatcher();
     private MovieDBHelper dbHelper;
 
@@ -87,11 +89,12 @@ public class MovieProvider extends ContentProvider {
             case MOVIE_WITH_ID:{
                 Log.v("MovieProvider QUERY", "MOVIE WITH ID");
                 cursor = dbHelper.getReadableDatabase().query(MovieContract.Movie.TABLE_NAME ,null, MovieContract.Movie._ID  + "= ?", selectionArgs,null,null,sortOrder);
+                Log.v(LOG_TAG, "RETURNING " + String.valueOf(cursor.getCount()));
                 break;
             }
             case MOVIE:{
                 Log.v("MovieProvider QUERY", "MOVIE");
-                cursor = dbHelper.getReadableDatabase().query(MovieContract.Movie.TABLE_NAME, null,selection, selectionArgs, null, null, sortOrder);
+                cursor = dbHelper.getReadableDatabase().query(MovieContract.Movie.TABLE_NAME, projection,selection, selectionArgs, null, null, sortOrder);
                 break;
             }
             case REVIEW_WITH_ID:{
@@ -258,6 +261,7 @@ Temp solution to test insert
                 int movieRowsInserted = 0;
                 try {
                     for (ContentValues value : values) {
+                        Log.v(LOG_TAG, "VALUE INSERTED " + value.toString());
                         long result = db.insert(MovieContract.Movie.TABLE_NAME, null, value);
                         if (result != -1) {
                             movieRowsInserted++;

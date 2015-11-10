@@ -72,15 +72,17 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private final static String LOG_TAG = "MainActivityFragment";
     private MovieAdapter mMovieAdapter;
     //GridView  gridView;
-    ListView  gridView;
+    GridView  gridView;
     //ImageAdapter imageAdapter;
     public List <Movie> movies;
+    int mPosition;
 
     private String sortTypeSaved;
     private ProgressBar progressBar;
     private View v;
     private View view;
     private SharedPreferences prefs;
+    private static final String SELECTED_KEY = "selected_position";
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -91,21 +93,33 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         String sort;
         if ("popularity".equals(sortType)){
             sort = "1";
-            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.SORT_TYPE + " = ?", new String[]{sort}, MovieContract.Movie.TITLE + " ASC");
+            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.SORT_TYPE + " = ?", new String[]{sort}, null);
         }else if("vote_average".equals(sortType)){
             sort = "2";
-            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.SORT_TYPE + " = ?", new String[]{sort}, MovieContract.Movie.TITLE + " ASC");
+            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.SORT_TYPE + " = ?", new String[]{sort}, null);
         }else{
             sort = "-1";
-            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.FAVORITE + " = ?", new String[]{"1"}, MovieContract.Movie.TITLE + " ASC");
+            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.FAVORITE + " = ?", new String[]{"1"}, null);
         }
         Log.v(LOG_TAG + " CL", sort);
+
+//        TODO NO DATA IN DB AND NO INTERNET
+        /*
+
+         */
+
+
         return cursor;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         mMovieAdapter.swapCursor(cursor);
+        if(mPosition != GridView.INVALID_POSITION){
+Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
+            gridView.setSelection(mPosition);
+        }
+       // mMovieAdapter.swapCursor(cursor);
 
     }
 
@@ -128,7 +142,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("movies", (ArrayList<Movie>) movies);
+        //outState.putParcelableArrayList("movies", (ArrayList<Movie>) movies);
+        if(mPosition != GridView.INVALID_POSITION){
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -153,13 +170,13 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
 
         mMovieAdapter = new MovieAdapter(getActivity(), null, 0);
 
-        View rootView = inflater.inflate(R.layout.fragment_main, container,false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         //ListView listView = (ListView) rootView.findViewById(R.id.gridview);
-        GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
+        this.gridView = (GridView) rootView.findViewById(R.id.gridview);
         gridView.setAdapter(mMovieAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -169,9 +186,21 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
                 if (cursor != null) {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                    String sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
+                    int idColumn = cursor.getColumnIndex(MovieContract.Movie._ID);
+                    String idData = cursor.getString(idColumn);
+                    Log.v(LOG_TAG, "PASS TO CALLBACK " +  MovieContract.Movie.buildMovieID(Integer.valueOf(idData)).toString());
+                    ((Callback) getActivity()).onItemSelected(MovieContract.Movie.buildMovieID(Integer.valueOf(idData)));
+                }
+                mPosition = position;
+                Log.v(LOG_TAG, "SAVED POSITION 1" + SELECTED_KEY);
+                if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)){
+                    //Log.v(LOG_TAG, "SAVED POSITION 2" + SELECTED_KEY);
+                    mPosition = savedInstanceState.getInt(SELECTED_KEY);
+                    Log.v(LOG_TAG, "SAVED POSITION 2 " + mPosition);
+                }
+                // String sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
 
-                    int id = cursor.getColumnIndex(MovieContract.Movie._ID);
+
 
                   /*  DownloadJsonReviewTask downloadReview = new DownloadJsonReviewTask(getContext());
                     downloadReview.execute(String.valueOf(cursor.getInt(id)));
@@ -179,16 +208,22 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                     DownloadJsonTrailerTask trailerReview = new DownloadJsonTrailerTask(getContext());
                     trailerReview.execute(String.valueOf(cursor.getInt(id)));*/
 
-                    Intent intent = new Intent(getActivity(), DetailActivity.class)
+                    /*Intent intent = new Intent(getActivity(), DetailActivity.class)
                             .setData(MovieContract.Movie.buildMovieID(cursor.getInt(id)));
-                    startActivity(intent);
-                }
+                    startActivity(intent);*/
+
             }
         });
 
         return rootView;
     }
 
+    public interface Callback{
+        /*
+        Callback for when an item has been selected
+         */
+        public void onItemSelected(Uri movieUri);
+    }
 
 
     void onSortChange(){

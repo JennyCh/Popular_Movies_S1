@@ -73,6 +73,9 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     ListView reviewListView;
     ListView trailerListView;
 
+    private Uri mUri = null;
+    static final String DETAIL_URI = "URI";
+
     String movieID;
     private static final int DETAIL_LOADER = 0;
     private static final String LOG_TAG = "DetailActivityFragment";
@@ -89,10 +92,10 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-        Log.v(LOG_TAG, "CREATE LOADER");
+       /* Log.v(LOG_TAG, "CREATE LOADER");
         Intent intent = getActivity().getIntent();
 
-        if(intent == null){
+        if(intent == null || intent.getData() == null){
             Log.v(LOG_TAG, "EMPTY INTENT");
             return null;
         }
@@ -106,8 +109,32 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         Log.v(LOG_TAG, "QUERY TRAILER");
         this.trailerCursor = getContext().getContentResolver().query(MovieContract.Trailer.buildTrailerID(idParameter), new String[]{MovieContract.Trailer.KEY}, null,new String[]{idStr}, null);
 
-        Log.v(LOG_TAG, idStr);
-        return new CursorLoader(getActivity(), intent.getData(), MOVIE_COLUMNS, null, new String[]{idStr},null);
+        Log.v(LOG_TAG, idStr);*/
+        //return new CursorLoader(getActivity(), intent.getData(), MOVIE_COLUMNS, null, new String[]{idStr},null);
+
+
+
+Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
+      /*  Intent intent = getActivity().getIntent();
+        if (intent == null || intent.getData() == null) {
+            return null;
+        }*/
+
+
+
+        if (null != mUri){
+            Log.v(LOG_TAG, "GETTING CURSOR");
+            String idArgument = mUri.getPathSegments().get(1);
+            Log.v(LOG_TAG, "ID VALUE " + idArgument);
+            Log.v(LOG_TAG, "QUERY REVIEW");
+            this.reviewCursor = getContext().getContentResolver().query(MovieContract.Review.buildReviewID(Integer.valueOf(idArgument)), null, null, new String[]{idArgument}, null);
+            Log.v(LOG_TAG, "QUERY TRAILER");
+            this.trailerCursor = getContext().getContentResolver().query(MovieContract.Trailer.buildTrailerID(Integer.valueOf(idArgument)), new String[]{MovieContract.Trailer.KEY}, null,new String[]{idArgument}, null);
+
+            return new CursorLoader(getActivity(), mUri, null, null, new String[]{String.valueOf(idArgument)},null);
+        }else {
+            return null;
+        }
     }
 
     @Override
@@ -157,9 +184,9 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
         final ImageView likeImage = (ImageView) getView().findViewById(R.id.like);
         if(favoriteData == 1){
-            Picasso.with(getContext()).load(R.drawable.heart_blue).into(likeImage);
+            Picasso.with(getContext()).load(R.drawable.pink_heart).into(likeImage);
         } else{
-            Picasso.with(getContext()).load(R.drawable.heart_love).into(likeImage);
+            Picasso.with(getContext()).load(R.drawable.gray_heart).into(likeImage);
         }
         likeImage.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -170,10 +197,10 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
                 int favoriteValue;
                 if(favoriteData == 1){
                     favoriteValue = 0;
-                    Picasso.with(getContext()).load(R.drawable.heart_love).into(likeImage);
+                    Picasso.with(getContext()).load(R.drawable.gray_heart).into(likeImage);
                 } else{
                     favoriteValue = 1;
-                    Picasso.with(getContext()).load(R.drawable.heart_blue).into(likeImage);
+                    Picasso.with(getContext()).load(R.drawable.pink_heart).into(likeImage);
                 }
 
 
@@ -324,6 +351,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
     }
 
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(DETAIL_LOADER, null, this);
@@ -338,6 +366,11 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Bundle arguments = getArguments();
+        if(arguments != null){
+            mUri = arguments.getParcelable(DetailActivityFragment.DETAIL_URI);
+        }
 
         //mMovieAdapter = new MovieAdapter(getActivity(), null, 0);
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
@@ -383,6 +416,21 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         //}
 
         //return rootView;
+    }
+
+    void onIDChange(int id){
+
+        Log.v(LOG_TAG, "RESTARTING LOADER");
+
+        Uri uri = mUri;
+        if(null !=  uri){
+            Uri updateUri = MovieContract.Movie.buildMovieID(id);
+            mUri = updateUri;
+            Log.v(LOG_TAG, mUri.toString());
+            getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+        }
+
+
     }
 
 

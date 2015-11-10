@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -20,24 +21,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements MainActivityFragment.Callback {
 
     //public List<Movie> movies;
    // private boolean twoPane;
    // Context context;
+
+    private static final String LOG_TAG = "MainActivity";
     private final String MOVIEFRAGMENT_TAG = "MFTAG";
     private SharedPreferences prefs;
     private String sortType;
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v("MainActivity", "onCreate");
         setContentView(R.layout.activity_main);
+        if(findViewById(R.id.movie_detail_container) != null){
+            Log.v(LOG_TAG, "TWO PANE");
+            mTwoPane = true;
 
-        if (savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().add(R.id.container, new MainActivityFragment(), MOVIEFRAGMENT_TAG).commit();
+            //In case that the device was simply rotated, we do not want to recreate the fragemnt
+            if (savedInstanceState == null){
+                Log.v(LOG_TAG, "SAVED INSTANCE STATE");
+                //WE  ADD A TAG, SO LATER IN THE ONRESUME METHOD WE CAN EXTRACT THAT SAME FRAGMENT BY TAG
+                getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, new DetailActivityFragment(), MOVIEFRAGMENT_TAG).commit();
+            }
+            Log.v(LOG_TAG, "PASSED INSTANCE STATE");
+
+        }else{
+            Log.v(LOG_TAG, "ONE PANE");
+            mTwoPane = false;
         }
+
+
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         /*this.sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
@@ -51,15 +69,22 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.v("MainActivity", "onResume");
+       // Log.v("MainActivity", "onResume");
         String sort = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
 
-        Log.v("MainActivity", sort + " | " + sortType);
+       // Log.v("MainActivity", sort + " | " + sortType);
         if(sort != null && !sort.equals(this.sortType)){
-            MainActivityFragment mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
+            MainActivityFragment mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
             if(null != mainActivityFragment){
-                Log.v("MainActivity", "onSortChange");
+                Log.v(LOG_TAG, "onSortChange");
                 mainActivityFragment.onSortChange();
+            }
+            //NOT NEEDED HERE, WE DON'T NEED TO UPDATE THE DETAIL JUST BASED ON THE SORT CHANGE
+            DetailActivityFragment detailActivityFragment = (DetailActivityFragment) getSupportFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
+            if(null != detailActivityFragment){
+                Log.v(LOG_TAG, "ON RESUME detailActivityFragment" );
+                int id= 76341; //TODO CHANGE THIS ID TO THE ONE THAT'S ONCLICK
+                detailActivityFragment.onIDChange(id);
             }
         }
         this.sortType = sort;
@@ -98,5 +123,24 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(Uri movieUri) {
+
+        Log.v(LOG_TAG, "Callback onItemSelected " + movieUri.toString());
+        if(mTwoPane){
+            Log.v(LOG_TAG, "Callback onItemSelected " + "TWO PANE");
+            Bundle args = new Bundle();
+            args.putParcelable(DetailActivityFragment.DETAIL_URI, movieUri);
+            DetailActivityFragment fragment = new DetailActivityFragment();
+            fragment.setArguments(args);
+            Log.v(LOG_TAG, "TWO PANE " + DetailActivityFragment.DETAIL_URI + " " + movieUri);
+            getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, fragment, MOVIEFRAGMENT_TAG).commit();
+        }else{
+            Log.v(LOG_TAG, "Callback onItemSelected " + "ONE PANE");
+            Intent intent = new Intent(this, DetailActivity.class).setData(movieUri);
+            startActivity(intent);
+        }
     }
 }

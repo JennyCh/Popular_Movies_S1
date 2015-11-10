@@ -116,62 +116,11 @@ public class MovieAdapter extends CursorAdapter {
             String baseUrl = "http://image.tmdb.org/t/p/w342";
             String url = baseUrl + data;
 
-        Picasso.with(context).setIndicatorsEnabled(true);
-        if (isNetworkConnected()) {
-            Log.v("MovieAdapter" , "YES INTERNET");
-            Picasso.with(context).load(url.toString()).networkPolicy(NetworkPolicy.NO_CACHE).into(viewHolder.imageItemView);
-        }else {
-            Log.v("MovieAdapter" , "NO INTERNET");
-            Picasso.with(context)
-                    .load(url.toString())
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(viewHolder.imageItemView, new Callback() {
-                        @Override
-                        public void onSuccess() {
+        //Picasso.with(context).setIndicatorsEnabled(true);
 
-                        }
+            Picasso.with(context).load(url.toString()).error(R.drawable.no_poster).resize(350, 500).centerCrop().into(viewHolder.imageItemView);
 
-                        @Override
-                        public void onError() {
-                            //Try again online if cache failed
-                      /*  Picasso.with(context)
-                                .load(posts.get(position).getImageUrl())
-                                .error(R.drawable.header)
-                                .into(viewHolder.imageItemView, new Callback() {
-                                    @Override
-                                    public void onSuccess() {
-
-                                    }
-
-                                    @Override
-                                    public void onError() {
-                                        Log.v("Picasso", "Could not fetch image");
-                                    }
-                                });*/
-                        }
-                    });
-
-
-        }
-
-
-        //textView.setText(formatData(cursor));
     }
-
-   /* public class Global extends Application {
-        @Override
-        public void onCreate() {
-            super.onCreate();
-
-            Picasso.Builder builder = new Picasso.Builder(this);
-            builder.downloader(new OkHttpDownloader(this,Integer.MAX_VALUE));
-            Picasso built = builder.build();
-            built.setIndicatorsEnabled(true);
-            built.setLoggingEnabled(true);
-            Picasso.setSingletonInstance(built);
-
-        }
-    }*/
 
     private String formatData(Cursor cursor){
         int poster_path = cursor.getColumnIndex(MovieContract.Movie.POSTER_PATH);

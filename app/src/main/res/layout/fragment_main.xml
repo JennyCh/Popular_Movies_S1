@@ -6,14 +6,14 @@
     tools:context=".MainActivityFragment">
 
 
-    <ProgressBar
+  <!--  <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:background="@color/black"
         android:visibility="visible"
-        />
+        />-->
 
 <!--    <ListView
         android:layout_width="fill_parent"
@@ -35,10 +35,11 @@
 
         android:stretchMode="columnWidth"
         android:gravity="center"
-        android:background="@color/black"
-        android:layout_below="@+id/progress_bar"
-        android:columnWidth="165dp"
+        android:background="@drawable/touch_selector"
 
-        />
+        style="@style/MovieListStyle"
+        android:columnWidth="165dp"/>
+    <!--  android:layout_below="@+id/progress_bar"-->
+    <!--android:choiceMode="singleChoice"-->
 
 </RelativeLayout>

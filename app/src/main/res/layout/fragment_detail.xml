@@ -8,9 +8,7 @@
     android:background="@color/white">
 
 
-
-
-        <RelativeLayout
+    <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -20,7 +18,7 @@
                     android:layout_height="wrap_content"
                     >
 
-                    <ImageView
+                <ImageView
                         android:layout_width="150dp"
                         android:layout_height="150dp"
                         android:id="@+id/detail_movie_poster"
@@ -136,7 +134,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/like"
-                            android:src="@drawable/heart_love"/>
+                            android:src="@drawable/gray_heart"/>
 
 
                     </LinearLayout>
@@ -161,16 +159,19 @@
                 android:id="@+id/reviewListView"
                 android:layout_below="@+id/detail_overview"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:layout_margin="25dp"
+                />
 
             <ListView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/trailerListView"
                 android:layout_below="@+id/reviewListView"
-                android:layout_centerHorizontal="true" />
-        </RelativeLayout>
+                android:layout_centerHorizontal="true"
+                android:layout_margin="15dp"/>
 
+        </RelativeLayout>
 
 
 </RelativeLayout>
