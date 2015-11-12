@@ -117,7 +117,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         mMovieAdapter.swapCursor(cursor);
         if(mPosition != GridView.INVALID_POSITION){
 Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
-            gridView.setSelection(mPosition);
+            gridView.smoothScrollToPosition(mPosition);
         }
        // mMovieAdapter.swapCursor(cursor);
 
@@ -144,6 +144,7 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
     public void onSaveInstanceState(Bundle outState) {
         //outState.putParcelableArrayList("movies", (ArrayList<Movie>) movies);
         if(mPosition != GridView.INVALID_POSITION){
+            Log.v(LOG_TAG,  "SAVING INSTANCE STATE " + mPosition);
             outState.putInt(SELECTED_KEY, mPosition);
         }
         super.onSaveInstanceState(outState);
@@ -188,16 +189,13 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     int idColumn = cursor.getColumnIndex(MovieContract.Movie._ID);
                     String idData = cursor.getString(idColumn);
-                    Log.v(LOG_TAG, "PASS TO CALLBACK " +  MovieContract.Movie.buildMovieID(Integer.valueOf(idData)).toString());
+                    Log.v(LOG_TAG, "PASS TO CALLBACK " + MovieContract.Movie.buildMovieID(Integer.valueOf(idData)).toString());
                     ((Callback) getActivity()).onItemSelected(MovieContract.Movie.buildMovieID(Integer.valueOf(idData)));
                 }
+                Log.v(LOG_TAG, "GLOBAL POSITION " + position);
                 mPosition = position;
-                Log.v(LOG_TAG, "SAVED POSITION 1" + SELECTED_KEY);
-                if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)){
-                    //Log.v(LOG_TAG, "SAVED POSITION 2" + SELECTED_KEY);
-                    mPosition = savedInstanceState.getInt(SELECTED_KEY);
-                    Log.v(LOG_TAG, "SAVED POSITION 2 " + mPosition);
-                }
+
+
                 // String sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
 
 
@@ -214,6 +212,13 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
 
             }
         });
+
+        Log.v(LOG_TAG, "SAVED POSITION 1" + SELECTED_KEY);
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)){
+            //Log.v(LOG_TAG, "SAVED POSITION 2" + SELECTED_KEY);
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+            Log.v(LOG_TAG, "SAVED POSITION 2 " + mPosition);
+        }
 
         return rootView;
     }
