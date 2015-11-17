@@ -37,6 +37,7 @@ import android.support.v4.content.Loader;
 
 
 import com.example.jenny.popular_movies_s1.data.MovieContract;
+import com.example.jenny.popular_movies_s1.service.MovieService;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -74,6 +75,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     ListView trailerListView;
 
     private Uri mUri = null;
+    private int id;
     static final String DETAIL_URI = "URI";
 
     String movieID;
@@ -86,10 +88,13 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
             MovieContract.Movie.OVERVIEW
     };
 
-    public DetailActivityFragment() {
-
+    public interface Callback{
+        /*
+        Callback for when an item has been selected
+         */
+        public void shareData(String str);
+        // public void onFirstLoad(Uri movieUri);
     }
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
        /* Log.v(LOG_TAG, "CREATE LOADER");
@@ -139,6 +144,7 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        StringBuilder shareMessage = new StringBuilder();
         Log.v(LOG_TAG, "FINISHED LOADER");
         if (!data.moveToFirst()){
             Log.v(LOG_TAG, "NO DATA LOADER");
@@ -165,6 +171,10 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
         final String idData = data.getString(movieId);
          final int favoriteData = data.getInt(favorite);
 
+        shareMessage.append("Check out this movie: ");
+        shareMessage.append(titleData);
+        shareMessage.append("\n");
+
         //String result = titleData + " | " + overviewData + " | " + releaseDataDate + " | " + pathData + " | " + voteAverageData + " | " + voteCountData;
 
         Log.v(LOG_TAG, "FAVORITE " + String.valueOf(favoriteData));
@@ -186,7 +196,7 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
         if(favoriteData == 1){
             Picasso.with(getContext()).load(R.drawable.pink_heart).into(likeImage);
         } else{
-            Picasso.with(getContext()).load(R.drawable.gray_heart).into(likeImage);
+            Picasso.with(getContext()).load(R.drawable.what_imoj).into(likeImage);
         }
         likeImage.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -197,7 +207,7 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
                 int favoriteValue;
                 if(favoriteData == 1){
                     favoriteValue = 0;
-                    Picasso.with(getContext()).load(R.drawable.gray_heart).into(likeImage);
+                    Picasso.with(getContext()).load(R.drawable.what_imoj).into(likeImage);
                 } else{
                     favoriteValue = 1;
                     Picasso.with(getContext()).load(R.drawable.pink_heart).into(likeImage);
@@ -243,7 +253,7 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
 
         if (!reviewCursor.moveToFirst()){
             Log.v(LOG_TAG, "NO DATA REVIEW");
-            return;
+            //return;
         }else{
             List<Review> reviews = new ArrayList<>();
             int reviewAuthorColumn = reviewCursor.getColumnIndex(MovieContract.Review.AUTHOR);
@@ -263,7 +273,11 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
 
         if (!trailerCursor.moveToFirst()){
             Log.v(LOG_TAG, "NO DATA TRAILER");
-            return;
+            shareMessage.append("\t");
+            shareMessage.append("#PopularMovies_SP2");
+            Log.v(LOG_TAG , shareMessage.toString());
+            ((Callback) getActivity()).shareData(shareMessage.toString());
+            //return;
         }else{
             final List<Trailer> trailers = new ArrayList<>();
             int trailerNameColumn = trailerCursor.getColumnIndex(MovieContract.Trailer.NAME);
@@ -277,7 +291,17 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
 
             int count = trailerCursor.getCount();
 
+
+
             for(int i = 0; i < count; i ++){
+                if (i == 0){
+                    shareMessage.append("https://www.youtube.com/watch?v=");
+                    shareMessage.append(trailerCursor.getString(trailerKeyColumn));
+                    shareMessage.append("\n");
+                    shareMessage.append("#PopularMovies_SP2");
+                    Log.v(LOG_TAG, shareMessage.toString());
+                    ((Callback) getActivity()).shareData(shareMessage.toString());
+                }
                 trailers.add(new Trailer(trailerCursor.getString(trailerNameColumn), 
                                             trailerCursor.getString(trailerSizeColumn), 
                                             trailerCursor.getString(trailerTypeColumn), 
@@ -296,6 +320,7 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
 
                         link.append("https://www.youtube.com/watch?v=");
                         link.append(key);
+
                         Log.v("ON CLICK LINK YOUTUBE ", link.toString());
                         try {
                             //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link.toString())));
@@ -367,9 +392,15 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Log.v(LOG_TAG, "CURSOR onCreateView");
+
         Bundle arguments = getArguments();
         if(arguments != null){
+            //mUri = arguments.getParcelable(DetailActivityFragment.DETAIL_URI);
+
+            Log.v(LOG_TAG, "CURSOR " + arguments.getParcelable("MOVIEID") + "|");
             mUri = arguments.getParcelable(DetailActivityFragment.DETAIL_URI);
+
         }
 
         //mMovieAdapter = new MovieAdapter(getActivity(), null, 0);
@@ -432,6 +463,8 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
 
 
     }
+
+
 
 
 /*

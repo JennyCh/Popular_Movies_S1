@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.jenny.popular_movies_s1.sync.MovieSyncAdapter;
+
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener{
 
@@ -29,6 +31,7 @@ public class SettingsActivity extends PreferenceActivity
         if(prefIndex >= 0){
             preference.setSummary(listPreference.getEntries()[prefIndex]);
         }
+        MovieSyncAdapter.syncImmediately(getBaseContext());
 
         return true;
     }

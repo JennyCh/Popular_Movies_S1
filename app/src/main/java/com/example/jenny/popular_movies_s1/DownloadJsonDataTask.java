@@ -40,7 +40,7 @@ public class DownloadJsonDataTask extends AsyncTask<String,Void,Void> {
 
     @Override
     protected Void doInBackground(String... params) {
-        HttpURLConnection urlConnection = null;
+       /* HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
         String movieJsonStr = null;
@@ -96,11 +96,11 @@ public class DownloadJsonDataTask extends AsyncTask<String,Void,Void> {
                     Log.e(LOG_TAG, "Error closing stream", e);
                 }
             }
-        }
+        }*/
         return null;
     }
 
-    private void getMovieDataFromJson (String movieJsonString) throws JSONException{
+   /* private void getMovieDataFromJson (String movieJsonString) throws JSONException{
 
         final String RESULTS = "results";
         final String ID = "id";
@@ -115,9 +115,9 @@ public class DownloadJsonDataTask extends AsyncTask<String,Void,Void> {
         boolean exists = false;
         Integer id = null;
 
-        /*
+        *//*
         get all the movie ids from database
-         */
+         *//*
         setArrayListWithExistingMovieIDs();
 
 
@@ -177,7 +177,7 @@ public class DownloadJsonDataTask extends AsyncTask<String,Void,Void> {
                 e.printStackTrace();
             }
 
-    }
+    }*/
 
     private ContentValues createContentValues_Movie_ForInsert(int id,String title,String path,String overview,double vote,String releaseDate, int voteCount, int sort){
         ContentValues movieValues = new ContentValues();

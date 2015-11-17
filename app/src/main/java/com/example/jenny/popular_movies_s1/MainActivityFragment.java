@@ -1,7 +1,10 @@
 package com.example.jenny.popular_movies_s1;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.FragmentTransaction;
+import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -40,6 +43,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 
 import com.example.jenny.popular_movies_s1.data.MovieContract;
+import com.example.jenny.popular_movies_s1.service.MovieService;
+import com.example.jenny.popular_movies_s1.sync.MovieSyncAdapter;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -83,6 +88,12 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private View view;
     private SharedPreferences prefs;
     private static final String SELECTED_KEY = "selected_position";
+    private int idValue;
+
+
+    public int getIdValue() {
+        return idValue;
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -101,20 +112,33 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             sort = "-1";
             cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.FAVORITE + " = ?", new String[]{"1"}, null);
         }
-        Log.v(LOG_TAG + " CL", sort);
 
-//        TODO NO DATA IN DB AND NO INTERNET
-        /*
 
-         */
-
+        Log.v(LOG_TAG, "CURSOR onCreateLoader");
 
         return cursor;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        Log.v(LOG_TAG, "CURSOR onLoadFinished " + cursor.getCount());
+        if(cursor.getCount() > 0) {
+            Log.v(LOG_TAG, "CURSOR POSITION " + cursor.getPosition());
+            cursor.moveToNext();
+           // for (int i = 0; i <= 1; i++) {
+                int idColumn = cursor.getColumnIndex(MovieContract.Movie._ID);
+                this.idValue = cursor.getInt(idColumn);
+            //}
+            Log.v(LOG_TAG, "CURSOR " + String.valueOf(idValue));
+
+            //cursor.close();
+        }else{
+            idValue = 0;
+            Log.v(LOG_TAG, "CURSOR " + String.valueOf(idValue));
+        }
+
         mMovieAdapter.swapCursor(cursor);
+
         if(mPosition != GridView.INVALID_POSITION){
 Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
             gridView.smoothScrollToPosition(mPosition);
@@ -125,6 +149,7 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        Log.v(LOG_TAG, "CURSOR onLoaderReset");
         mMovieAdapter.swapCursor(null);
     }
 
@@ -155,9 +180,15 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+      //  Log.v(LOG_TAG, "CURSOR --- callbck" + String.valueOf(idValue));
+        //((Callback) getActivity()).onFirstLoad(Uri.parse("content://com.example.jenny.popular_movies_s1/movie/" + String.valueOf(idValue)));
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -180,6 +211,8 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
         this.gridView = (GridView) rootView.findViewById(R.id.gridview);
         gridView.setAdapter(mMovieAdapter);
 
+
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -191,6 +224,7 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
                     String idData = cursor.getString(idColumn);
                     Log.v(LOG_TAG, "PASS TO CALLBACK " + MovieContract.Movie.buildMovieID(Integer.valueOf(idData)).toString());
                     ((Callback) getActivity()).onItemSelected(MovieContract.Movie.buildMovieID(Integer.valueOf(idData)));
+
                 }
                 Log.v(LOG_TAG, "GLOBAL POSITION " + position);
                 mPosition = position;
@@ -228,6 +262,7 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
         Callback for when an item has been selected
          */
         public void onItemSelected(Uri movieUri);
+       // public void onFirstLoad(Uri movieUri);
     }
 
 
@@ -247,17 +282,31 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
         Log.v(LOG_TAG, "update");
         this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
-Log.v(LOG_TAG + "UPD", sortType);
+        Log.v(LOG_TAG + "UPD", sortType);
 
 
+        MovieSyncAdapter.syncImmediately(getActivity());
 
-if (isNetworkConnected()) {
-    Log.v("INTERNET", "CONNECTED");
+
+/*if (isNetworkConnected()) {
+*//*    Log.v("INTERNET", "CONNECTED");
     DownloadJsonDataTask asyncDownload = new DownloadJsonDataTask(getContext());
-    asyncDownload.execute(sortType);
+    asyncDownload.execute(sortType);*//*
+
+    Intent alarmIntent = new Intent(getActivity(), MovieService.AlarmReceiver.class);
+    //alarmIntent.putExtra(MovieService.LOCATION_QUERY_EXTRA, mPosition);
+
+    PendingIntent pi = PendingIntent.getBroadcast(getActivity(),0,alarmIntent,PendingIntent.FLAG_ONE_SHOT);
+    AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+    am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+5000, pi);
+
+
+    Intent intent = new Intent(getActivity(), MovieService.class);
+    intent.putExtra(MovieService.LOCATION_QUERY_EXTRA,sortType);
+    getActivity().startService(intent);
 }else{
     Log.v("INTERNET", "NOT CONNECTED");
-}
+}*/
 
         //sortTypeSaved = sortType;
 

@@ -134,7 +134,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/like"
-                            android:src="@drawable/gray_heart"/>
+                            android:src="@drawable/what_imoj"/>
 
 
                     </LinearLayout>
@@ -153,23 +153,25 @@
                 android:layout_marginLeft="28dp"
                 android:layout_marginStart="28dp" />
 
+        <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/trailerListView"
+            android:layout_below="@+id/detail_overview"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="15dp"/>
+
             <ListView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/reviewListView"
-                android:layout_below="@+id/detail_overview"
+                android:layout_below="@+id/trailerListView"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="25dp"
                 />
 
-            <ListView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/trailerListView"
-                android:layout_below="@+id/reviewListView"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="15dp"/>
+
 
         </RelativeLayout>
 

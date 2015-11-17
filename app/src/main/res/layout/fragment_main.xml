@@ -37,7 +37,7 @@
         android:gravity="center"
 
         style="@style/MovieListStyle"
-        android:columnWidth="165dp"/>
+        android:columnWidth="170dp"/>
     <!--  android:layout_below="@+id/progress_bar"-->
     <!--android:choiceMode="singleChoice"-->
 
