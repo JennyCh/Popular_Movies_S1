@@ -126,8 +126,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             Log.v(LOG_TAG, "CURSOR POSITION " + cursor.getPosition());
             cursor.moveToNext();
            // for (int i = 0; i <= 1; i++) {
+            if (mPosition == 0) {
                 int idColumn = cursor.getColumnIndex(MovieContract.Movie._ID);
                 this.idValue = cursor.getInt(idColumn);
+                setFirstElementID();
+            }
             //}
             Log.v(LOG_TAG, "CURSOR " + String.valueOf(idValue));
 
@@ -147,16 +150,18 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
 
     }
 
+    private void setFirstElementID (){
+        Log.v(LOG_TAG, "TEST setFirstElementID " + String.valueOf(idValue));
+        ((Callback) getActivity()).onFirstLoad(idValue);
+    }
+
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         Log.v(LOG_TAG, "CURSOR onLoaderReset");
         mMovieAdapter.swapCursor(null);
     }
 
-    public MainActivityFragment() {
-        this.sortTypeSaved = "";
 
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -262,13 +267,15 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
         Callback for when an item has been selected
          */
         public void onItemSelected(Uri movieUri);
-       // public void onFirstLoad(Uri movieUri);
+        public void onFirstLoad(int id);
     }
 
 
     void onSortChange(){
         Log.v(LOG_TAG, "onSortChange");
         update();
+        ((Callback) getActivity()).onFirstLoad(0);
+        this.mPosition = 0;
         getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
 

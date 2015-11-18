@@ -20,8 +20,14 @@ public class DetailActivity extends ActionBarActivity implements DetailActivityF
 
     private Intent mShareIntent;
     private ShareActionProvider shareActionProvider;
-    private String shareLink; {
-    };
+    private String shareLink;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

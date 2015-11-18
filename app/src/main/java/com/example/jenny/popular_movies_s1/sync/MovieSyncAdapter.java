@@ -234,15 +234,15 @@ onAccountCreated(newAccount, context);
             }
 
 
-            Log.v(LOG_TAG, "BEFORE INSERT");
-            Log.v(LOG_TAG, "VECTOR SIZE " + String.valueOf(movieVector.size()));
+            //Log.v(LOG_TAG, "BEFORE INSERT");
+          //  Log.v(LOG_TAG, "VECTOR SIZE " + String.valueOf(movieVector.size()));
             int inserted = 0;
             if (movieVector.size() > 0) {
                 ContentValues[] movieArray = new ContentValues[movieVector.size()];
                 movieVector.toArray(movieArray);
                 inserted = getContext().getContentResolver().bulkInsert(MovieContract.Movie.CONTENT_URI, movieArray);
             }
-            Log.v(LOG_TAG, "Complete " + inserted + " inserted");
+            //Log.v(LOG_TAG, "Complete " + inserted + " inserted");
 
 
 
@@ -273,14 +273,14 @@ onAccountCreated(newAccount, context);
                     MovieContract.Movie._ID
             );
 
-            Log.v(LOG_TAG, "Number of IDs returned " + String.valueOf(getMovieIDsPresentInDBcursor.getCount()));
+            //Log.v(LOG_TAG, "Number of IDs returned " + String.valueOf(getMovieIDsPresentInDBcursor.getCount()));
             int idColumn = getMovieIDsPresentInDBcursor.getColumnIndex(MovieContract.Movie._ID);
             existingMovieIDList = new ArrayList<>();
 
 
             while (getMovieIDsPresentInDBcursor.moveToNext()) {
                 existingMovieIDList.add(getMovieIDsPresentInDBcursor.getInt(idColumn));
-                Log.v(LOG_TAG,"movies in DB " + existingMovieIDList.size() + "  " + String.valueOf(getMovieIDsPresentInDBcursor.getInt(idColumn)));
+                //Log.v(LOG_TAG,"movies in DB " + existingMovieIDList.size() + "  " + String.valueOf(getMovieIDsPresentInDBcursor.getInt(idColumn)));
             }
         }finally {
             // getMovieIDsPresentInDBcursor.close();

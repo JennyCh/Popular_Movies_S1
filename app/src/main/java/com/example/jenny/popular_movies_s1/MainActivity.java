@@ -40,10 +40,30 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
     private String shareMessage;
     MainActivityFragment mainActivityFragment;
     private ShareActionProvider shareActionProvider;
+    private int id;
+    private DetailActivityFragment detailActivityFragment;
+
+    private static final String DETAIL_ID = "detailid";
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.v(LOG_TAG, "SAVING STATE RESTORE " + String.valueOf(id));
+
+        outState.putInt(DETAIL_ID, id);
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v(LOG_TAG, "BEFORE RESTORED ID " + this.id);
+        if(savedInstanceState != null){
+            Log.v(LOG_TAG,  "RESTORED ID " + this.id);
+            this.id = savedInstanceState.getInt(DETAIL_ID);
+            Log.v(LOG_TAG,  "RESTORED ID " + this.id);
+        }
+        Log.v(LOG_TAG,  "AFTER RESTORED ID " + this.id);
         Log.v("MainActivity", "onCreate");
         setContentView(R.layout.activity_main);
        // this.mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
@@ -61,10 +81,11 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
                 Log.v(LOG_TAG, "SAVED INSTANCE STATE");
                 //WE  ADD A TAG, SO LATER IN THE ONRESUME METHOD WE CAN EXTRACT THAT SAME FRAGMENT BY TAG
 
+                this.detailActivityFragment = new DetailActivityFragment();
 
 
+                getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, this.detailActivityFragment, MOVIEFRAGMENT_TAG).commit();
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, new DetailActivityFragment(), MOVIEFRAGMENT_TAG).commit();
             }
             Log.v(LOG_TAG, "PASSED INSTANCE STATE");
 
@@ -88,46 +109,52 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
     @Override
     protected void onResume() {
         super.onResume();
+
+
         Log.v("MainActivity", "CURSOR onResume");
         String sort = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
         //int id= mainActivityFragment.getIdValue();
+        if (this.sortType == null){
+            this.sortType = sort;
+        }
 
 
         //Log.v(LOG_TAG, "cursor +++ " + String.valueOf(id));
        // Log.v("MainActivity", sort + " | " + sortType);
+        Log.v("MainActivity", "SORT " + sort + " this.sortType " + this.sortType);
         if(sort != null && !sort.equals(this.sortType)){
+
+
           //  Log.v("MainActivity", "CURSOR sort != null && !sort.equals(this.sortType)");
-            MainActivityFragment mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
+            this.mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
             if(null != mainActivityFragment){
-                Log.v("MainActivity", "CURSOR null != mainActivityFragment");
+                Log.v("MainActivity", "CURSOR null != mainActivityFragment ");
 
                 mainActivityFragment.onSortChange();
             }
 
 
             //NOT NEEDED HERE, WE DON'T NEED TO UPDATE THE DETAIL JUST BASED ON THE SORT CHANGE
-            DetailActivityFragment detailActivityFragment = (DetailActivityFragment) getSupportFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
+
+            this.detailActivityFragment = (DetailActivityFragment) getSupportFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
             if(null != detailActivityFragment){
                 //Log.v(LOG_TAG, "CURSOR ON RESUME detailActivityFragment" );
-                 //TODO CHANGE THIS ID TO THE ONE THAT'S ONCLICK
+                 //TODO: CHANGE THIS ID TO THE ONE THAT'S ONCLICK
                 //Log.v(LOG_TAG, "CURSOR onSortChange " + " ID VALUE " + String.valueOf(id));
 
                 //Log.v("MainActivity", "CURSOR !detailActivityFragment.getLoaderManager().hasRunningLoaders()" + String.valueOf(id));
                 //Cursor cursor =
 
                 //Log.v("MainActivity", "CURSOR String.valueOf(id) " + String.valueOf(id));
-               int  id = 0;
-                Log.v("MainActivity", "CURSOR PASSED ID" + String.valueOf(id));
+
+                Log.v("MainActivity",  "TEST onResume " + String.valueOf(id));
                 detailActivityFragment.onIDChange(id);
             }
         }
         this.sortType = sort;
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
+
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -205,7 +232,7 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
     public void onItemSelected(Uri movieUri) {
 
         Log.v(LOG_TAG, "Callback onItemSelected " + movieUri.toString());
-        if(mTwoPane){
+        if (mTwoPane) {
             Log.v(LOG_TAG, "Callback onItemSelected " + "TWO PANE");
             Bundle args = new Bundle();
             args.putParcelable(DetailActivityFragment.DETAIL_URI, movieUri);
@@ -213,11 +240,34 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
             fragment.setArguments(args);
             Log.v(LOG_TAG, "TWO PANE " + DetailActivityFragment.DETAIL_URI + " " + movieUri);
             getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, fragment, MOVIEFRAGMENT_TAG).commit();
+            this.id = Integer.valueOf(movieUri.getPathSegments().get(1));
         }else{
             Log.v(LOG_TAG, "Callback onItemSelected " + "ONE PANE " + movieUri.toString());
             Intent intent = new Intent(this, DetailActivity.class).setData(movieUri);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onFirstLoad(int id) {
+        this.id = id;
+        DetailActivityFragment detailActivityFragment = (DetailActivityFragment) getSupportFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
+        if(null != detailActivityFragment){
+            //Log.v(LOG_TAG, "CURSOR ON RESUME detailActivityFragment" );
+            //TODO: CHANGE THIS ID TO THE ONE THAT'S ONCLICK
+            //Log.v(LOG_TAG, "CURSOR onSortChange " + " ID VALUE " + String.valueOf(id));
+
+            //Log.v("MainActivity", "CURSOR !detailActivityFragment.getLoaderManager().hasRunningLoaders()" + String.valueOf(id));
+            //Cursor cursor =
+
+            //Log.v("MainActivity", "CURSOR String.valueOf(id) " + String.valueOf(id));
+
+            Log.v("MainActivity", "TEST onFirstLoad " + String.valueOf(id));
+            detailActivityFragment.onIDChange(id);
+        }else{
+            Log.v("MainActivity", "TEST onFirstLoad ELSE" + String.valueOf(id));
+        }
+
     }
 
     @Override
