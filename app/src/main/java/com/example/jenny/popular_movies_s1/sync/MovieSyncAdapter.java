@@ -72,7 +72,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("http://api.themoviedb.org/3/discover/movie?sort_by=");
         stringBuilder.append(sortType);
-        stringBuilder.append(".desc&api_key=25fce2cd7e460dfabda689d0ebfcf69f");
+        stringBuilder.append(".desc&api_key=-------------------------------");
 
         Log.v(LOG_TAG, "onHandleIntent " + stringBuilder.toString());
 

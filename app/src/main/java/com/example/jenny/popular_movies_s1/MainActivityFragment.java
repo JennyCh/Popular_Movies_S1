@@ -125,7 +125,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         if(cursor.getCount() > 0) {
             Log.v(LOG_TAG, "CURSOR POSITION " + cursor.getPosition());
             cursor.moveToNext();
-           // for (int i = 0; i <= 1; i++) {
+            // for (int i = 0; i <= 1; i++) {
             if (mPosition == 0) {
                 int idColumn = cursor.getColumnIndex(MovieContract.Movie._ID);
                 this.idValue = cursor.getInt(idColumn);
@@ -143,10 +143,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         mMovieAdapter.swapCursor(cursor);
 
         if(mPosition != GridView.INVALID_POSITION){
-Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
+            Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
             gridView.smoothScrollToPosition(mPosition);
         }
-       // mMovieAdapter.swapCursor(cursor);
+        // mMovieAdapter.swapCursor(cursor);
 
     }
 
@@ -191,7 +191,7 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
     @Override
     public void onResume() {
         super.onResume();
-      //  Log.v(LOG_TAG, "CURSOR --- callbck" + String.valueOf(idValue));
+        //  Log.v(LOG_TAG, "CURSOR --- callbck" + String.valueOf(idValue));
         //((Callback) getActivity()).onFirstLoad(Uri.parse("content://com.example.jenny.popular_movies_s1/movie/" + String.valueOf(idValue)));
     }
 
@@ -241,7 +241,6 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
 
                   /*  DownloadJsonReviewTask downloadReview = new DownloadJsonReviewTask(getContext());
                     downloadReview.execute(String.valueOf(cursor.getInt(id)));
-
                     DownloadJsonTrailerTask trailerReview = new DownloadJsonTrailerTask(getContext());
                     trailerReview.execute(String.valueOf(cursor.getInt(id)));*/
 
@@ -299,15 +298,11 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
 *//*    Log.v("INTERNET", "CONNECTED");
     DownloadJsonDataTask asyncDownload = new DownloadJsonDataTask(getContext());
     asyncDownload.execute(sortType);*//*
-
     Intent alarmIntent = new Intent(getActivity(), MovieService.AlarmReceiver.class);
     //alarmIntent.putExtra(MovieService.LOCATION_QUERY_EXTRA, mPosition);
-
     PendingIntent pi = PendingIntent.getBroadcast(getActivity(),0,alarmIntent,PendingIntent.FLAG_ONE_SHOT);
     AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
     am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+5000, pi);
-
-
     Intent intent = new Intent(getActivity(), MovieService.class);
     intent.putExtra(MovieService.LOCATION_QUERY_EXTRA,sortType);
     getActivity().startService(intent);
@@ -324,7 +319,6 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
 /*    @Override
     public void onStart() {
         super.onStart();
-
         Log.v(LOG_TAG, "onStart");
         this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sort = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
@@ -334,10 +328,6 @@ Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
             onSortChange();
         }
         this.sortTypeSaved = sort;
-
-
-
-
                 update();
     }*/
 

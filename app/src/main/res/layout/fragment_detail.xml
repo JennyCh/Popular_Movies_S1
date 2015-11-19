@@ -22,7 +22,6 @@
                         android:layout_width="150dp"
                         android:layout_height="150dp"
                         android:id="@+id/detail_movie_poster"
-                        android:src="@drawable/no_poster"
 
                         />
 
@@ -35,7 +34,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:text="Movie Title"
                             android:id="@+id/detail_title" />
 
                         <LinearLayout
@@ -47,60 +45,60 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/star1"
-                                android:src="@drawable/gray_star"/>
+                                />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/star2"
-                                android:src="@drawable/gray_star"/>
+                                />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/star3"
-                                android:src="@drawable/gray_star"/>
+                                />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/star4"
-                                android:src="@drawable/gray_star"/>
+                                />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/star5"
-                                android:src="@drawable/gray_star"/>
+                                />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/star6"
-                                android:src="@drawable/gray_star"/>
+                                />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/star7"
-                                android:src="@drawable/gray_star"/>
+                                />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/star8"
-                                android:src="@drawable/gray_star"/>
+                                />
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/star9"
-                                android:src="@drawable/gray_star"/>
+                                />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/star10"
-                                android:src="@drawable/gray_star"/>
+                                />
 
 
                         </LinearLayout>
@@ -114,27 +112,26 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2652"
+
                                 android:id="@+id/detail_voteNum" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text=" people voted"
+
                                 android:id="@+id/textView" />
                         </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Jan 13th 2016"
                             android:id="@+id/detail_date" />
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/like"
-                            android:src="@drawable/what_imoj"/>
+                            />
 
 
                     </LinearLayout>
@@ -144,7 +141,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+
                 android:id="@+id/detail_overview"
                 android:layout_marginTop="153dp"
                 android:layout_alignParentTop="true"
@@ -159,7 +156,9 @@
             android:id="@+id/trailerListView"
             android:layout_below="@+id/detail_overview"
             android:layout_centerHorizontal="true"
-            android:layout_margin="15dp"/>
+            android:layout_margin="5dp"
+            android:background="@color/gray"
+            />
 
             <ListView
                 android:layout_width="fill_parent"
@@ -168,7 +167,8 @@
                 android:layout_below="@+id/trailerListView"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_margin="25dp"
+                android:layout_margin="5dp"
+                android:background="@color/gray"
                 />
 
 

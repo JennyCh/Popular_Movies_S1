@@ -29,8 +29,8 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity implements MainActivityFragment.Callback, DetailActivityFragment.Callback {
 
     //public List<Movie> movies;
-   // private boolean twoPane;
-   // Context context;
+    // private boolean twoPane;
+    // Context context;
 
     private static final String LOG_TAG = "MainActivity";
     private final String MOVIEFRAGMENT_TAG = "MFTAG";
@@ -66,16 +66,16 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
         Log.v(LOG_TAG,  "AFTER RESTORED ID " + this.id);
         Log.v("MainActivity", "onCreate");
         setContentView(R.layout.activity_main);
-       // this.mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
+        // this.mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
         if(findViewById(R.id.movie_detail_container) != null){
             Log.v(LOG_TAG, "TWO PANE");
             mTwoPane = true;
-           // DetailActivityFragment detailActivityFragment = new DetailActivityFragment();
-           // Bundle bundle = new Bundle();
+            // DetailActivityFragment detailActivityFragment = new DetailActivityFragment();
+            // Bundle bundle = new Bundle();
 //
-           // Log.v(LOG_TAG, "CURSOR-" + String.valueOf(mainActivityFragment.getIdValue()));
-          ///  bundle.putString(DetailActivityFragment.DETAIL_URI, "content://com.example.jenny.popular_movies_s1/movie/" + String.valueOf(mainActivityFragment.getIdValue()));
-          //  detailActivityFragment.setArguments(bundle);
+            // Log.v(LOG_TAG, "CURSOR-" + String.valueOf(mainActivityFragment.getIdValue()));
+            ///  bundle.putString(DetailActivityFragment.DETAIL_URI, "content://com.example.jenny.popular_movies_s1/movie/" + String.valueOf(mainActivityFragment.getIdValue()));
+            //  detailActivityFragment.setArguments(bundle);
             //In case that the device was simply rotated, we do not want to recreate the fragemnt
             if (savedInstanceState == null){
                 Log.v(LOG_TAG, "SAVED INSTANCE STATE");
@@ -120,12 +120,12 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
 
 
         //Log.v(LOG_TAG, "cursor +++ " + String.valueOf(id));
-       // Log.v("MainActivity", sort + " | " + sortType);
+        // Log.v("MainActivity", sort + " | " + sortType);
         Log.v("MainActivity", "SORT " + sort + " this.sortType " + this.sortType);
         if(sort != null && !sort.equals(this.sortType)){
 
 
-          //  Log.v("MainActivity", "CURSOR sort != null && !sort.equals(this.sortType)");
+            //  Log.v("MainActivity", "CURSOR sort != null && !sort.equals(this.sortType)");
             this.mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
             if(null != mainActivityFragment){
                 Log.v("MainActivity", "CURSOR null != mainActivityFragment ");
@@ -139,7 +139,7 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
             this.detailActivityFragment = (DetailActivityFragment) getSupportFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
             if(null != detailActivityFragment){
                 //Log.v(LOG_TAG, "CURSOR ON RESUME detailActivityFragment" );
-                 //TODO: CHANGE THIS ID TO THE ONE THAT'S ONCLICK
+                //TODO: CHANGE THIS ID TO THE ONE THAT'S ONCLICK
                 //Log.v(LOG_TAG, "CURSOR onSortChange " + " ID VALUE " + String.valueOf(id));
 
                 //Log.v("MainActivity", "CURSOR !detailActivityFragment.getLoaderManager().hasRunningLoaders()" + String.valueOf(id));
@@ -206,7 +206,7 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
         int id = item.getItemId();
 
         if(mTwoPane){
-                 //noinspection SimplifiableIfStatement
+            //noinspection SimplifiableIfStatement
             if (id == R.id.action_settings){
                 //Log.v("HERE ", "launching Settings 2");
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -277,7 +277,6 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
     }
 /*@Override
     public void onFirstLoad(Uri movieUri) {
-
         Log.v(LOG_TAG, "Callback onFirstLoad " + movieUri.toString());
         if(mTwoPane){
             Log.v(LOG_TAG, "Callback onFirstLoad " + "TWO PANE");

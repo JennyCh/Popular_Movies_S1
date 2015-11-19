@@ -65,7 +65,6 @@ public class DetailActivity extends ActionBarActivity implements DetailActivityF
 
        /* MenuItem item = menu.findItem(R.id.menu_item_share);
         ShareActionProvider actionProvider = (ShareActionProvider) item.getActionProvider();
-
        // String shareText = URL_TO_SHARE;
         Intent shareIntent = ShareCompat.IntentBuilder.from(this).setType("text/plain").setText("#CodeAndroid").getIntent();
         actionProvider.setShareIntent(shareIntent);*/
@@ -99,7 +98,7 @@ public class DetailActivity extends ActionBarActivity implements DetailActivityF
 
         Intent shareIntent = new Intent();//ShareCompat.IntentBuilder.from(this).setType("text/plain").setText("").getIntent();
         shareIntent.setAction(Intent.ACTION_SEND);
-      //  Log.v("DetailActivity", this.shareLink);
+        //  Log.v("DetailActivity", this.shareLink);
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareLink);
         shareIntent.setType("text/plain");
 

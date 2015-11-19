@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class DetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-   // ImageView imageView;
+    // ImageView imageView;
     //TextView titleView;
     //TextView overViewView;
     //TextView voteView;
@@ -56,7 +56,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     //private int id;
     static final String DETAIL_URI = "URI";
 
-   // String movieID;
+    // String movieID;
     private static final int DETAIL_LOADER = 0;
     private static final String LOG_TAG = "DetailActivityFragment";
 
@@ -69,7 +69,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
+        Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
 
 
 
@@ -115,7 +115,7 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
         String voteCountData = data.getString(voteCount);
         //String favoriteData = data.getString(favorite);
         final String idData = data.getString(movieId);
-         final int favoriteData = data.getInt(favorite);
+        final int favoriteData = data.getInt(favorite);
 
         shareMessage.append("Check out this movie: ");
         shareMessage.append(titleData);
@@ -197,7 +197,7 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
    /*     TextView favoriteTextView = (TextView) getView().findViewById(R.id.detail_favorite);
         favoriteTextView.setText(favoriteData);*/
 
-        if (!reviewCursor.moveToFirst()){
+        if (reviewCursor == null || !reviewCursor.moveToFirst()){
             Log.v(LOG_TAG, "NO DATA REVIEW");
             //return;
         }else{
@@ -217,7 +217,7 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
 
         }
 
-        if (!trailerCursor.moveToFirst()){
+        if (trailerCursor ==  null || !trailerCursor.moveToFirst()){
             Log.v(LOG_TAG, "NO DATA TRAILER");
             shareMessage.append("\t");
             shareMessage.append("#PopularMovies_SP2");
@@ -248,10 +248,10 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
                     Log.v(LOG_TAG, shareMessage.toString());
                     ((Callback) getActivity()).shareData(shareMessage.toString());
                 }
-                trailers.add(new Trailer(trailerCursor.getString(trailerNameColumn), 
-                                            trailerCursor.getString(trailerSizeColumn), 
-                                            trailerCursor.getString(trailerTypeColumn), 
-                                            trailerCursor.getString(trailerKeyColumn)));
+                trailers.add(new Trailer(trailerCursor.getString(trailerNameColumn),
+                        trailerCursor.getString(trailerSizeColumn),
+                        trailerCursor.getString(trailerTypeColumn),
+                        trailerCursor.getString(trailerKeyColumn)));
 
                 //final String key = trailerCursor.getString(trailerKeyColumn);
 
@@ -262,7 +262,7 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                         String key = trailers.get(position).getKey();
+                        String key = trailers.get(position).getKey();
 
                         link.append("https://www.youtube.com/watch?v=");
                         link.append(key);
@@ -297,7 +297,7 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-       // loader.swapCursor(null);
+        // loader.swapCursor(null);
     }
 
     @Override
@@ -337,7 +337,7 @@ Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
 
         reviewListView = (ListView) rootView.findViewById(R.id.reviewListView);
         trailerListView = (ListView) rootView.findViewById(R.id.trailerListView);
-       return rootView;
+        return rootView;
 
     }
 
