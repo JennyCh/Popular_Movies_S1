@@ -48,7 +48,7 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.v(LOG_TAG, "SAVING STATE RESTORE " + String.valueOf(id));
+      //  Log.v(LOG_TAG, "SAVING STATE RESTORE " + String.valueOf(id));
 
         outState.putInt(DETAIL_ID, id);
         super.onSaveInstanceState(outState);
@@ -57,50 +57,54 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v(LOG_TAG, "BEFORE RESTORED ID " + this.id);
+      //  Log.v(LOG_TAG, "BEFORE RESTORED ID " + this.id);
         if(savedInstanceState != null){
-            Log.v(LOG_TAG,  "RESTORED ID " + this.id);
+           // Log.v(LOG_TAG,  "RESTORED ID " + this.id);
             this.id = savedInstanceState.getInt(DETAIL_ID);
-            Log.v(LOG_TAG,  "RESTORED ID " + this.id);
+          //  Log.v(LOG_TAG,  "RESTORED ID " + this.id);
         }
-        Log.v(LOG_TAG,  "AFTER RESTORED ID " + this.id);
-        Log.v("MainActivity", "onCreate");
+       // Log.v(LOG_TAG,  "AFTER RESTORED ID " + this.id);
+       // Log.v("MainActivity", "onCreate");
         setContentView(R.layout.activity_main);
         // this.mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
         if(findViewById(R.id.movie_detail_container) != null){
-            Log.v(LOG_TAG, "TWO PANE");
+           // Log.v(LOG_TAG, "TWO PANE");
             mTwoPane = true;
             // DetailActivityFragment detailActivityFragment = new DetailActivityFragment();
             // Bundle bundle = new Bundle();
-//
+//todo:
+
+
             // Log.v(LOG_TAG, "CURSOR-" + String.valueOf(mainActivityFragment.getIdValue()));
             ///  bundle.putString(DetailActivityFragment.DETAIL_URI, "content://com.example.jenny.popular_movies_s1/movie/" + String.valueOf(mainActivityFragment.getIdValue()));
             //  detailActivityFragment.setArguments(bundle);
             //In case that the device was simply rotated, we do not want to recreate the fragemnt
             if (savedInstanceState == null){
-                Log.v(LOG_TAG, "SAVED INSTANCE STATE");
+              //  Log.v(LOG_TAG, "SAVED INSTANCE STATE");
                 //WE  ADD A TAG, SO LATER IN THE ONRESUME METHOD WE CAN EXTRACT THAT SAME FRAGMENT BY TAG
 
                 this.detailActivityFragment = new DetailActivityFragment();
 
 
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, this.detailActivityFragment, MOVIEFRAGMENT_TAG).commit();
 
             }
-            Log.v(LOG_TAG, "PASSED INSTANCE STATE");
+
+
+           // Log.v(LOG_TAG, "PASSED INSTANCE STATE");
 
         }else{
-            Log.v(LOG_TAG, "ONE PANE");
+          //  Log.v(LOG_TAG, "ONE PANE");
             mTwoPane = false;
         }
-
 
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         /*this.sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
         */
 
-        Log.v(LOG_TAG, "MovieSyncAdapter.initializeSyncAdapter(this)");
+       // Log.v(LOG_TAG, "MovieSyncAdapter.initializeSyncAdapter(this)");
         MovieSyncAdapter.initializeSyncAdapter(this);
 
 
@@ -111,7 +115,7 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
         super.onResume();
 
 
-        Log.v("MainActivity", "CURSOR onResume");
+       // Log.v("MainActivity", "CURSOR onResume");
         String sort = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
         //int id= mainActivityFragment.getIdValue();
         if (this.sortType == null){
@@ -121,14 +125,14 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
 
         //Log.v(LOG_TAG, "cursor +++ " + String.valueOf(id));
         // Log.v("MainActivity", sort + " | " + sortType);
-        Log.v("MainActivity", "SORT " + sort + " this.sortType " + this.sortType);
+       // Log.v("MainActivity", "SORT " + sort + " this.sortType " + this.sortType);
         if(sort != null && !sort.equals(this.sortType)){
 
 
             //  Log.v("MainActivity", "CURSOR sort != null && !sort.equals(this.sortType)");
             this.mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
             if(null != mainActivityFragment){
-                Log.v("MainActivity", "CURSOR null != mainActivityFragment ");
+              //  Log.v("MainActivity", "CURSOR null != mainActivityFragment ");
 
                 mainActivityFragment.onSortChange();
             }
@@ -138,8 +142,7 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
 
             this.detailActivityFragment = (DetailActivityFragment) getSupportFragmentManager().findFragmentByTag(MOVIEFRAGMENT_TAG);
             if(null != detailActivityFragment){
-                //Log.v(LOG_TAG, "CURSOR ON RESUME detailActivityFragment" );
-                //TODO: CHANGE THIS ID TO THE ONE THAT'S ONCLICK
+                //Log.v(LOG_TAG, "CURSOR ON RESUME detailActivityFragment" );/
                 //Log.v(LOG_TAG, "CURSOR onSortChange " + " ID VALUE " + String.valueOf(id));
 
                 //Log.v("MainActivity", "CURSOR !detailActivityFragment.getLoaderManager().hasRunningLoaders()" + String.valueOf(id));
@@ -147,8 +150,14 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
 
                 //Log.v("MainActivity", "CURSOR String.valueOf(id) " + String.valueOf(id));
 
-                Log.v("MainActivity",  "TEST onResume " + String.valueOf(id));
+             //   Log.v("MainActivity", "TEST onResume " + String.valueOf(id));
                 detailActivityFragment.onIDChange(id);
+                if(id != 0) {
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("MOVIEID", String.valueOf(id));
+                    this.detailActivityFragment.setArguments(bundle);
+                }
             }
         }
         this.sortType = sort;
@@ -173,12 +182,12 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
 
         // Set the share Intent
 
-        Log.v("MainActivity" , "onShareAction");
+     //   Log.v("MainActivity" , "onShareAction");
         if (shareActionProvider != null) {
-            Log.v("MainActivity" , "onShareAction NOT NULL");
+        //    Log.v("MainActivity" , "onShareAction NOT NULL");
             shareActionProvider.setShareIntent(shareIntent);
         }
-        Log.v("MainActivity", "onShareAction POST EXEC");
+      //  Log.v("MainActivity", "onShareAction POST EXEC");
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -231,18 +240,18 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
     @Override
     public void onItemSelected(Uri movieUri) {
 
-        Log.v(LOG_TAG, "Callback onItemSelected " + movieUri.toString());
+       // Log.v(LOG_TAG, "Callback onItemSelected " + movieUri.toString());
         if (mTwoPane) {
-            Log.v(LOG_TAG, "Callback onItemSelected " + "TWO PANE");
+           // Log.v(LOG_TAG, "Callback onItemSelected " + "TWO PANE");
             Bundle args = new Bundle();
             args.putParcelable(DetailActivityFragment.DETAIL_URI, movieUri);
             DetailActivityFragment fragment = new DetailActivityFragment();
             fragment.setArguments(args);
-            Log.v(LOG_TAG, "TWO PANE " + DetailActivityFragment.DETAIL_URI + " " + movieUri);
+          //  Log.v(LOG_TAG, "TWO PANE " + DetailActivityFragment.DETAIL_URI + " " + movieUri);
             getSupportFragmentManager().beginTransaction().replace(R.id.movie_detail_container, fragment, MOVIEFRAGMENT_TAG).commit();
             this.id = Integer.valueOf(movieUri.getPathSegments().get(1));
         }else{
-            Log.v(LOG_TAG, "Callback onItemSelected " + "ONE PANE " + movieUri.toString());
+          //  Log.v(LOG_TAG, "Callback onItemSelected " + "ONE PANE " + movieUri.toString());
             Intent intent = new Intent(this, DetailActivity.class).setData(movieUri);
             startActivity(intent);
         }
@@ -262,10 +271,10 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
 
             //Log.v("MainActivity", "CURSOR String.valueOf(id) " + String.valueOf(id));
 
-            Log.v("MainActivity", "TEST onFirstLoad " + String.valueOf(id));
+           // Log.v("MainActivity", "TEST onFirstLoad " + String.valueOf(id));
             detailActivityFragment.onIDChange(id);
         }else{
-            Log.v("MainActivity", "TEST onFirstLoad ELSE" + String.valueOf(id));
+          //  Log.v("MainActivity", "TEST onFirstLoad ELSE" + String.valueOf(id));
         }
 
     }
@@ -273,7 +282,7 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
     @Override
     public void shareData(String str) {
         this.shareMessage = str;
-        Log.v("MainActivity SHARE ", shareMessage);
+       // Log.v("MainActivity SHARE ", shareMessage);
     }
 /*@Override
     public void onFirstLoad(Uri movieUri) {

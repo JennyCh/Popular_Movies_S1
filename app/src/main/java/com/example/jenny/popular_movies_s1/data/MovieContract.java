@@ -41,7 +41,7 @@ public class MovieContract {
 
         public static Uri buildMovieID(int id){
             Uri uri = ContentUris.withAppendedId(CONTENT_URI, id);
-            Log.v("BUILD MOVIE ID", uri.toString());
+            //Log.v("BUILD MOVIE ID", uri.toString());
             return uri;
         }
     }

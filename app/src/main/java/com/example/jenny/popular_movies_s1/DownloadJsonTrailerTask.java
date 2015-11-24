@@ -40,13 +40,13 @@ public class DownloadJsonTrailerTask extends AsyncTask<String, Void, Void> {
         String reviewJsonStr = null;
 
         movieID = params[0];
-        if (!"245891".equals(movieID)) {
+        //if (!"245891".equals(movieID)) {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("http://api.themoviedb.org/3/movie/");
             stringBuilder.append(movieID);
-            stringBuilder.append("/videos?api_key=-----------------------------------");
+            stringBuilder.append("/videos?api_key=XXXX");
 
-            if (!"9643".equals(movieID)) {
+            //if (!"9643".equals(movieID)) {
                 try {
                     URL url = new URL(stringBuilder.toString());
 
@@ -89,8 +89,8 @@ public class DownloadJsonTrailerTask extends AsyncTask<String, Void, Void> {
                         }
                     }
                 }
-            }
-        }
+            //}
+        //}
             return null;
         }
 
@@ -137,14 +137,14 @@ public class DownloadJsonTrailerTask extends AsyncTask<String, Void, Void> {
                 trailerVector.add(trailerValues);
 
             }
-            Log.d(LOG_TAG, "BEFORE INSERT");
+           // Log.d(LOG_TAG, "BEFORE INSERT");
             int inserted = 0;
             if (trailerVector.size() > 0) {
                 ContentValues[] trailerArray = new ContentValues[trailerVector.size()];
                 trailerVector.toArray(trailerArray);
                 inserted = mContext.getContentResolver().bulkInsert(MovieContract.Trailer.CONTENT_URI, trailerArray);
             }
-            Log.d(LOG_TAG, "Complete " + inserted + " inserted");
+           // Log.d(LOG_TAG, "Complete " + inserted + " inserted");
         }catch (JSONException e){
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();

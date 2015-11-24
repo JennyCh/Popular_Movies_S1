@@ -104,18 +104,18 @@ public class DetailActivity extends ActionBarActivity implements DetailActivityF
 
         // Set the share Intent
 
-        Log.v("DetailActivity" , "onShareAction");
+        //Log.v("DetailActivity" , "onShareAction");
         if (shareActionProvider != null) {
-            Log.v("DetailActivity" , "onShareAction NOT NULL");
+            //Log.v("DetailActivity" , "onShareAction NOT NULL");
             shareActionProvider.setShareIntent(shareIntent);
         }
-        Log.v("DetailActivity" , "onShareAction POST EXEC");
+        //Log.v("DetailActivity" , "onShareAction POST EXEC");
     }
 
     @Override
     public void shareData(String str) {
         this.shareLink = str;
 
-        Log.v("DetailActivity", str);
+        //Log.v("DetailActivity", str);
     }
 }

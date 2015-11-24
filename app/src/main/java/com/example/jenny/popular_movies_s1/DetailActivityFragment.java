@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.support.v4.app.LoaderManager;
@@ -69,17 +70,17 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-        Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
+        //Log.v(LOG_TAG, "onCreateLoader " + mUri + "|");
 
 
 
         if (null != mUri){
-            Log.v(LOG_TAG, "GETTING CURSOR");
+           // Log.v(LOG_TAG, "GETTING CURSOR");
             this.idArgument = mUri.getPathSegments().get(1);
-            Log.v(LOG_TAG, "ID VALUE " + idArgument);
-            Log.v(LOG_TAG, "QUERY REVIEW");
+          //  Log.v(LOG_TAG, "ID VALUE " + idArgument);
+          //  Log.v(LOG_TAG, "QUERY REVIEW");
             this.reviewCursor = getContext().getContentResolver().query(MovieContract.Review.buildReviewID(Integer.valueOf(idArgument)), null, null, new String[]{idArgument}, null);
-            Log.v(LOG_TAG, "QUERY TRAILER");
+           // Log.v(LOG_TAG, "QUERY TRAILER");
             this.trailerCursor = getContext().getContentResolver().query(MovieContract.Trailer.buildTrailerID(Integer.valueOf(idArgument)), new String[]{MovieContract.Trailer.KEY}, null,new String[]{idArgument}, null);
 
             return new CursorLoader(getActivity(), mUri, null, null, new String[]{String.valueOf(idArgument)},null);
@@ -91,9 +92,9 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         StringBuilder shareMessage = new StringBuilder();
-        Log.v(LOG_TAG, "FINISHED LOADER");
+       // Log.v(LOG_TAG, "FINISHED LOADER");
         if (!data.moveToFirst()){
-            Log.v(LOG_TAG, "NO DATA LOADER");
+        //    Log.v(LOG_TAG, "NO DATA LOADER");
             return;
         }
 
@@ -123,7 +124,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
         //String result = titleData + " | " + overviewData + " | " + releaseDataDate + " | " + pathData + " | " + voteAverageData + " | " + voteCountData;
 
-        Log.v(LOG_TAG, "FAVORITE " + String.valueOf(favoriteData));
+       // Log.v(LOG_TAG, "FAVORITE " + String.valueOf(favoriteData));
         TextView titleTextView = (TextView) getView().findViewById(R.id.detail_title);
         titleTextView.setText(titleData);
 
@@ -162,7 +163,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
                 onIDChange(Integer.valueOf(idData));
                 updateValues.put(MovieContract.Movie.FAVORITE, favoriteValue);
                 getContext().getContentResolver().update(uri, updateValues, null, new String[]{idData});
-                Log.v(LOG_TAG, "UPDATED FAVORITE");
+               // Log.v(LOG_TAG, "UPDATED FAVORITE");
             }
         });
 
@@ -198,7 +199,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         favoriteTextView.setText(favoriteData);*/
 
         if (reviewCursor == null || !reviewCursor.moveToFirst()){
-            Log.v(LOG_TAG, "NO DATA REVIEW");
+           // Log.v(LOG_TAG, "NO DATA REVIEW");
             //return;
         }else{
             List<Review> reviews = new ArrayList<>();
@@ -214,14 +215,15 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
             //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.review_item, reviews);
             ReviewAdapter mReviewAdapter = new ReviewAdapter(getActivity(),reviews);
             this.reviewListView.setAdapter(mReviewAdapter);
+            ListUtils.setDynamicHeight(reviewListView);
 
         }
 
         if (trailerCursor ==  null || !trailerCursor.moveToFirst()){
-            Log.v(LOG_TAG, "NO DATA TRAILER");
+           // Log.v(LOG_TAG, "NO DATA TRAILER");
             shareMessage.append("\t");
             shareMessage.append("#PopularMovies_SP2");
-            Log.v(LOG_TAG , shareMessage.toString());
+            //Log.v(LOG_TAG , shareMessage.toString());
             ((Callback) getActivity()).shareData(shareMessage.toString());
             //return;
         }else{
@@ -245,7 +247,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
                     shareMessage.append(trailerCursor.getString(trailerKeyColumn));
                     shareMessage.append("\n");
                     shareMessage.append("#PopularMovies_SP2");
-                    Log.v(LOG_TAG, shareMessage.toString());
+                  //  Log.v(LOG_TAG, shareMessage.toString());
                     ((Callback) getActivity()).shareData(shareMessage.toString());
                 }
                 trailers.add(new Trailer(trailerCursor.getString(trailerNameColumn),
@@ -267,7 +269,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
                         link.append("https://www.youtube.com/watch?v=");
                         link.append(key);
 
-                        Log.v("ON CLICK LINK YOUTUBE ", link.toString());
+                      //  Log.v("ON CLICK LINK YOUTUBE ", link.toString());
                         try {
                             //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link.toString())));
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link.toString()));
@@ -284,8 +286,30 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
             }
             TrailerAdapter mTrailerAdapter = new TrailerAdapter(getActivity(), trailers);
             this.trailerListView.setAdapter(mTrailerAdapter);
+            ListUtils.setDynamicHeight(trailerListView);
         }
 
+    }
+
+    public static class ListUtils {
+        public static void setDynamicHeight(ListView mListView) {
+            ListAdapter mListAdapter = mListView.getAdapter();
+            if (mListAdapter == null) {
+                // when adapter is null
+                return;
+            }
+            int height = 0;
+            int desiredWidth = View.MeasureSpec.makeMeasureSpec(mListView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+            for (int i = 0; i < mListAdapter.getCount(); i++) {
+                View listItem = mListAdapter.getView(i, null, mListView);
+                listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+                height += listItem.getMeasuredHeight();
+            }
+            ViewGroup.LayoutParams params = mListView.getLayoutParams();
+            params.height = height + (mListView.getDividerHeight() * (mListAdapter.getCount() - 1));
+            mListView.setLayoutParams(params);
+            mListView.requestLayout();
+        }
     }
 
 
@@ -304,30 +328,37 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     public void onResume() {
         super.onResume();
 
-        Log.v(LOG_TAG, "CURSOR onResume");
+       // Log.v(LOG_TAG, "CURSOR onResume");
 
         if(idArgument != null){
             //mUri = arguments.getParcelable(DetailActivityFragment.DETAIL_URI);
 
-            Log.v(LOG_TAG, "CURSOR " + idArgument + "|");
+        //    Log.v(LOG_TAG, "CURSOR " + idArgument + "|");
             mUri = MovieContract.Movie.buildMovieID(Integer.valueOf(idArgument));
 
         }
-        Log.v(LOG_TAG, "CURSOR POST Resume");
+       // Log.v(LOG_TAG, "CURSOR POST Resume");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.v(LOG_TAG, "CURSOR onCreateView");
+       // Log.v(LOG_TAG, "CURSOR onCreateView");
 
         Bundle arguments = getArguments();
         if(arguments != null){
             //mUri = arguments.getParcelable(DetailActivityFragment.DETAIL_URI);
 
-            Log.v(LOG_TAG, "CURSOR " + arguments.getParcelable("MOVIEID") + "|");
-            mUri = arguments.getParcelable(DetailActivityFragment.DETAIL_URI);
+        //    Log.v(LOG_TAG, "CURSOR " + arguments.getParcelable("MOVIEID") + "|+");
+
+            String idVal = arguments.getParcelable("MOVIEID");
+            if(idVal != null) {
+                mUri = MovieContract.Movie.buildMovieID(Integer.valueOf(idVal));
+                this.idArgument = idVal;
+            }else {
+                mUri = arguments.getParcelable(DetailActivityFragment.DETAIL_URI);
+            }
 
         }else{
             mUri = MovieContract.Movie.buildMovieID(0);
@@ -343,22 +374,22 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
     void onIDChange(int id){
 
-        Log.v(LOG_TAG, "RESTARTING LOADER " + String.valueOf(id) + "|");
+       // Log.v(LOG_TAG, "RESTARTING LOADER " + String.valueOf(id) + "|");
 
         Uri uri = mUri;
         Uri updateUri;
         if(null !=  uri){
             updateUri = MovieContract.Movie.buildMovieID(id);
             mUri = updateUri;
-            Log.v(LOG_TAG, mUri.toString());
-            Log.v(LOG_TAG, "RESTARTING LOADER IF " + mUri.toString());
+        //   Log.v(LOG_TAG, mUri.toString());
+         //   Log.v(LOG_TAG, "RESTARTING LOADER IF " + mUri.toString());
             if(id != 0) {
                 getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
             }
         }else{
             updateUri = MovieContract.Movie.buildMovieID(id);
             mUri = updateUri;
-            Log.v(LOG_TAG, "RESTARTING LOADER ELSE " + mUri.toString());
+          //  Log.v(LOG_TAG, "RESTARTING LOADER ELSE " + mUri.toString());
             if(id != 0) {
                 getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
             }

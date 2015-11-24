@@ -11,17 +11,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Jenny Charnetskaya"
             android:id="@+id/reviewAuthor"
             android:background="@color/white"
             android:textStyle="bold|italic"
-            android:textColor="@color/gray"
+            android:textColor="@color/white"
             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from  by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham."
+
             android:id="@+id/reviewContent"
             android:background="@color/white"/>
     </LinearLayout>

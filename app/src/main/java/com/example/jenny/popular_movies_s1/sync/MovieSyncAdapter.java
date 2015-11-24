@@ -57,7 +57,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        Log.d(LOG_TAG, "onPerformSync Called.");
+        //Log.d(LOG_TAG, "onPerformSync Called.");
 
 
 
@@ -72,9 +72,9 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("http://api.themoviedb.org/3/discover/movie?sort_by=");
         stringBuilder.append(sortType);
-        stringBuilder.append(".desc&api_key=-------------------------------");
+        stringBuilder.append(".desc&api_key=XXXX");
 
-        Log.v(LOG_TAG, "onHandleIntent " + stringBuilder.toString());
+       // Log.v(LOG_TAG, "onHandleIntent " + stringBuilder.toString());
 
         try{
             URL url = new URL(stringBuilder.toString());
@@ -98,8 +98,8 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
             }
             movieJsonStr = buffer.toString();
 
-            Log.v(LOG_TAG, "BEGIN INSERT");
-            Log.v(LOG_TAG, movieJsonStr);
+            //Log.v(LOG_TAG, "BEGIN INSERT");
+           // Log.v(LOG_TAG, movieJsonStr);
             getMovieDataFromJson(movieJsonStr);
 
         }catch(IOException e){
@@ -228,7 +228,7 @@ onAccountCreated(newAccount, context);
                     DownloadJsonTrailerTask trailerReview = new DownloadJsonTrailerTask(getContext());
                     trailerReview.execute(String.valueOf(id));
 
-                    Log.v(LOG_TAG, movieValues.toString());
+                   // Log.v(LOG_TAG, movieValues.toString());
                 }
 
             }

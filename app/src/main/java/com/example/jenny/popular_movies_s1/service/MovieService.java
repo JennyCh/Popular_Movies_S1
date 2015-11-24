@@ -1,49 +1,22 @@
 package com.example.jenny.popular_movies_s1.service;
 
 import android.app.IntentService;
-import android.app.Service;
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.ArrayAdapter;
-
-import com.example.jenny.popular_movies_s1.DownloadJsonReviewTask;
-import com.example.jenny.popular_movies_s1.DownloadJsonTrailerTask;
-import com.example.jenny.popular_movies_s1.R;
-import com.example.jenny.popular_movies_s1.data.MovieContract;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by Jenny on 11/12/2015.
  */
 public class MovieService extends IntentService {
 
-    private ArrayAdapter<String> mMovieAdapter;
     public static final String LOCATION_QUERY_EXTRA = "lqe";
-    private final String LOG_TAG = MovieService.class.getSimpleName();
-    private SharedPreferences prefs;
    // private String sortType;
 
-    private Cursor getMovieIDsPresentInDBcursor = null;
-    private List<Integer> existingMovieIDList;
 
     private Context mContext;
     private String sortType;

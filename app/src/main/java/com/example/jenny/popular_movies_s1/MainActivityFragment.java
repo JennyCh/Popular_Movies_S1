@@ -97,33 +97,33 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        Log.v(LOG_TAG, "CREATING LOADER");
+       // Log.v(LOG_TAG, "CREATING LOADER");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
         CursorLoader cursor;
         String sort;
         if ("popularity".equals(sortType)){
             sort = "1";
-            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.SORT_TYPE + " = ?", new String[]{sort}, null);
+            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.SORT_TYPE + " = ?", new String[]{sort}, MovieContract.Movie.TITLE);
         }else if("vote_average".equals(sortType)){
             sort = "2";
-            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.SORT_TYPE + " = ?", new String[]{sort}, null);
+            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.SORT_TYPE + " = ?", new String[]{sort}, MovieContract.Movie.TITLE);
         }else{
             sort = "-1";
-            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.FAVORITE + " = ?", new String[]{"1"}, null);
+            cursor = new CursorLoader(getActivity(), MovieContract.Movie.CONTENT_URI, null,MovieContract.Movie.FAVORITE + " = ?", new String[]{"1"}, MovieContract.Movie.TITLE);
         }
 
 
-        Log.v(LOG_TAG, "CURSOR onCreateLoader");
+       // Log.v(LOG_TAG, "CURSOR onCreateLoader");
 
         return cursor;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        Log.v(LOG_TAG, "CURSOR onLoadFinished " + cursor.getCount());
+       // Log.v(LOG_TAG, "CURSOR onLoadFinished " + cursor.getCount());
         if(cursor.getCount() > 0) {
-            Log.v(LOG_TAG, "CURSOR POSITION " + cursor.getPosition());
+           // Log.v(LOG_TAG, "CURSOR POSITION " + cursor.getPosition());
             cursor.moveToNext();
             // for (int i = 0; i <= 1; i++) {
             if (mPosition == 0) {
@@ -132,18 +132,18 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 setFirstElementID();
             }
             //}
-            Log.v(LOG_TAG, "CURSOR " + String.valueOf(idValue));
+           // Log.v(LOG_TAG, "CURSOR 1" + String.valueOf(idValue));
 
             //cursor.close();
         }else{
             idValue = 0;
-            Log.v(LOG_TAG, "CURSOR " + String.valueOf(idValue));
+           // Log.v(LOG_TAG, "CURSOR 2" + String.valueOf(idValue));
         }
 
         mMovieAdapter.swapCursor(cursor);
 
         if(mPosition != GridView.INVALID_POSITION){
-            Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
+            //Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
             gridView.smoothScrollToPosition(mPosition);
         }
         // mMovieAdapter.swapCursor(cursor);
@@ -151,13 +151,13 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     }
 
     private void setFirstElementID (){
-        Log.v(LOG_TAG, "TEST setFirstElementID " + String.valueOf(idValue));
+       // Log.v(LOG_TAG, "TEST setFirstElementID " + String.valueOf(idValue));
         ((Callback) getActivity()).onFirstLoad(idValue);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        Log.v(LOG_TAG, "CURSOR onLoaderReset");
+       // Log.v(LOG_TAG, "CURSOR onLoaderReset");
         mMovieAdapter.swapCursor(null);
     }
 
@@ -174,7 +174,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public void onSaveInstanceState(Bundle outState) {
         //outState.putParcelableArrayList("movies", (ArrayList<Movie>) movies);
         if(mPosition != GridView.INVALID_POSITION){
-            Log.v(LOG_TAG,  "SAVING INSTANCE STATE " + mPosition);
+           // Log.v(LOG_TAG,  "SAVING INSTANCE STATE " + mPosition);
             outState.putInt(SELECTED_KEY, mPosition);
         }
         super.onSaveInstanceState(outState);
@@ -227,11 +227,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     int idColumn = cursor.getColumnIndex(MovieContract.Movie._ID);
                     String idData = cursor.getString(idColumn);
-                    Log.v(LOG_TAG, "PASS TO CALLBACK " + MovieContract.Movie.buildMovieID(Integer.valueOf(idData)).toString());
+                   // Log.v(LOG_TAG, "PASS TO CALLBACK " + MovieContract.Movie.buildMovieID(Integer.valueOf(idData)).toString());
                     ((Callback) getActivity()).onItemSelected(MovieContract.Movie.buildMovieID(Integer.valueOf(idData)));
 
                 }
-                Log.v(LOG_TAG, "GLOBAL POSITION " + position);
+               // Log.v(LOG_TAG, "GLOBAL POSITION " + position);
                 mPosition = position;
 
 
@@ -251,11 +251,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             }
         });
 
-        Log.v(LOG_TAG, "SAVED POSITION 1" + SELECTED_KEY);
+       // Log.v(LOG_TAG, "SAVED POSITION 1" + SELECTED_KEY);
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)){
             //Log.v(LOG_TAG, "SAVED POSITION 2" + SELECTED_KEY);
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
-            Log.v(LOG_TAG, "SAVED POSITION 2 " + mPosition);
+          //  Log.v(LOG_TAG, "SAVED POSITION 2 " + mPosition);
         }
 
         return rootView;
@@ -271,7 +271,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
 
     void onSortChange(){
-        Log.v(LOG_TAG, "onSortChange");
+      //  Log.v(LOG_TAG, "onSortChange");
         update();
         ((Callback) getActivity()).onFirstLoad(0);
         this.mPosition = 0;
@@ -285,10 +285,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     }
 
     private void update(){
-        Log.v(LOG_TAG, "update");
+      //  Log.v(LOG_TAG, "update");
         this.prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortType = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
-        Log.v(LOG_TAG + "UPD", sortType);
+      //  Log.v(LOG_TAG + "UPD", sortType);
 
 
         MovieSyncAdapter.syncImmediately(getActivity());

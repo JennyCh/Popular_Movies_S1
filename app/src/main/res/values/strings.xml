@@ -30,9 +30,7 @@
     <string name="content_authority">com.example.jenny.popular_movies_s1</string>
     <string name="title_activity_no_internet_connection">NoInternetConnection</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_no_internet">NoInternetActivity</string>
+    <string name="peope_voted_str"> people voted</string>
 
 
 

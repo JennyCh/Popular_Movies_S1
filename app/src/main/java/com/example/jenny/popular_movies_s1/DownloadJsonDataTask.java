@@ -213,14 +213,14 @@ public class DownloadJsonDataTask extends AsyncTask<String,Void,Void> {
                     MovieContract.Movie._ID
             );
 
-            Log.v(LOG_TAG, "Number of IDs returned " + String.valueOf(getMovieIDsPresentInDBcursor.getCount()));
+            //Log.v(LOG_TAG, "Number of IDs returned " + String.valueOf(getMovieIDsPresentInDBcursor.getCount()));
             int idColumn = getMovieIDsPresentInDBcursor.getColumnIndex(MovieContract.Movie._ID);
             existingMovieIDList = new ArrayList<>();
 
 
             while (getMovieIDsPresentInDBcursor.moveToNext()) {
                 existingMovieIDList.add(getMovieIDsPresentInDBcursor.getInt(idColumn));
-                Log.v(LOG_TAG,"movies in DB " + existingMovieIDList.size() + "  " + String.valueOf(getMovieIDsPresentInDBcursor.getInt(idColumn)));
+               // Log.v(LOG_TAG,"movies in DB " + existingMovieIDList.size() + "  " + String.valueOf(getMovieIDsPresentInDBcursor.getInt(idColumn)));
             }
         }finally {
             getMovieIDsPresentInDBcursor.close();

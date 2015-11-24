@@ -84,36 +84,36 @@ public class MovieProvider extends ContentProvider {
 
 
         Cursor cursor;
-        Log.v("QUERY MovieProvider", uri.toString());
+        //Log.v("QUERY MovieProvider", uri.toString());
         switch (uriMathcher.match(uri)){
             case MOVIE_WITH_ID:{
-                Log.v("MovieProvider QUERY", "MOVIE WITH ID");
+                //Log.v("MovieProvider QUERY", "MOVIE WITH ID");
                 cursor = dbHelper.getReadableDatabase().query(MovieContract.Movie.TABLE_NAME ,null, MovieContract.Movie._ID  + "= ?", selectionArgs,null,null,sortOrder);
-                Log.v(LOG_TAG, "RETURNING " + String.valueOf(cursor.getCount()));
+               // Log.v(LOG_TAG, "RETURNING " + String.valueOf(cursor.getCount()));
                 break;
             }
             case MOVIE:{
-                Log.v("MovieProvider QUERY", "MOVIE");
+              //  Log.v("MovieProvider QUERY", "MOVIE");
                 cursor = dbHelper.getReadableDatabase().query(MovieContract.Movie.TABLE_NAME, projection,selection, selectionArgs, null, null, sortOrder);
                 break;
             }
             case REVIEW_WITH_ID:{
-                Log.v("MovieProvider QUERY", "REVIEW WITH ID");
+                //Log.v("MovieProvider QUERY", "REVIEW WITH ID");
                 cursor = dbHelper.getReadableDatabase().query(MovieContract.Review.TABLE_NAME,null, MovieContract.Review._ID + " = ?",selectionArgs, null,null,sortOrder);
                 break;
             }
             case REVIEW:{
-                Log.v("MovieProvider QUERY", "REVIEW");
+               // Log.v("MovieProvider QUERY", "REVIEW");
                 cursor = dbHelper.getReadableDatabase().query(MovieContract.Review.TABLE_NAME,null, selection,selectionArgs, null,null,sortOrder);
                 break;
             }
             case TRAILER_WITH_ID:{
-                Log.v("MovieProvider QUERY", "TRAILER WITH ID");
+                //Log.v("MovieProvider QUERY", "TRAILER WITH ID");
                 cursor = dbHelper.getReadableDatabase().query(MovieContract.Trailer.TABLE_NAME,null, MovieContract.Trailer._ID + " = ?",selectionArgs, null,null,sortOrder);
                 break;
             }
             case TRAILER:{
-                Log.v("MovieProvider QUERY", "TRAILER");
+                //Log.v("MovieProvider QUERY", "TRAILER");
                 cursor = dbHelper.getReadableDatabase().query(MovieContract.Trailer.TABLE_NAME,null, selection,selectionArgs, null,null,sortOrder);
                 break;
             }
@@ -261,7 +261,7 @@ Temp solution to test insert
                 int movieRowsInserted = 0;
                 try {
                     for (ContentValues value : values) {
-                        Log.v(LOG_TAG, "VALUE INSERTED " + value.toString());
+                        //Log.v(LOG_TAG, "VALUE INSERTED " + value.toString());
                         long result = db.insert(MovieContract.Movie.TABLE_NAME, null, value);
                         if (result != -1) {
                             movieRowsInserted++;

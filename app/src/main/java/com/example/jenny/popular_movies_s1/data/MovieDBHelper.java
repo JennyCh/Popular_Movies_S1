@@ -57,9 +57,9 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 MovieContract.Movie.FAVORITE + " INTEGER DEFAULT 0, " +
                 MovieContract.Movie.VOTE_COUNT + " INTEGER DEFAULT 0" +
                 " );";
-        Log.v("MovieDBHelper", SQL_CREATE_MOVIE_TABLE);
-        Log.v("MovieDBHelper", SQL_CREATE_REVIEW_TABLE);
-        Log.v("MovieDBHelper", SQL_CREATE_TRAILER_TABLE);
+        //Log.v("MovieDBHelper", SQL_CREATE_MOVIE_TABLE);
+        //Log.v("MovieDBHelper", SQL_CREATE_REVIEW_TABLE);
+       // Log.v("MovieDBHelper", SQL_CREATE_TRAILER_TABLE);
 
 
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
@@ -74,7 +74,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
         Needs something that will wipe all but favorites from all 3 tables
          */
 
-        Log.v("MovieDBHelper", "DELETING TABLES");
+        //Log.v("MovieDBHelper", "DELETING TABLES");
 
         db.execSQL("DROP TABLE IF EXISTS " + MovieContract.Trailer.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + MovieContract.Review.TABLE_NAME);

@@ -23,13 +23,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Trailers From Hell"
+
                 android:id="@+id/trailerName" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1080"
+
                 android:id="@+id/trailerQuality" />
         </LinearLayout>
     </LinearLayout>
