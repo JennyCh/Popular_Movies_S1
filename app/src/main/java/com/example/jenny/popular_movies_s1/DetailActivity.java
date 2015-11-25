@@ -21,6 +21,7 @@ public class DetailActivity extends ActionBarActivity implements DetailActivityF
     private Intent mShareIntent;
     private ShareActionProvider shareActionProvider;
     private String shareLink;
+    private Uri mUri;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -49,6 +50,11 @@ public class DetailActivity extends ActionBarActivity implements DetailActivityF
         }
     }
 
+    @Override
+    public void saveUri(Uri uri) {
+       // Log.v("DetailActivity " , "GOT URI" );
+        this.mUri = uri;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

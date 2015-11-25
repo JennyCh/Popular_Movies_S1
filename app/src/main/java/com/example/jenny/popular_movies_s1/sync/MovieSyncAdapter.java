@@ -72,7 +72,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("http://api.themoviedb.org/3/discover/movie?sort_by=");
         stringBuilder.append(sortType);
-        stringBuilder.append(".desc&api_key=XXXX");
+        stringBuilder.append(".desc&api_key=xxxx");
 
        // Log.v(LOG_TAG, "onHandleIntent " + stringBuilder.toString());
 
@@ -221,12 +221,13 @@ onAccountCreated(newAccount, context);
 
                     ContentValues movieValues = createContentValues_Movie_ForInsert(id, title, path, overview, vote, releaseDate, voteCount, sort);
                     movieVector.add(movieValues);
-
+                   // Log.v(LOG_TAG, "GETTING TRAILER AND MOVIE FOR ID " + String.valueOf(id));
+                    DownloadJsonTrailerTask trailerReview = new DownloadJsonTrailerTask(getContext());
+                    trailerReview.execute(String.valueOf(id));
                     DownloadJsonReviewTask downloadReview = new DownloadJsonReviewTask(getContext());
                     downloadReview.execute(String.valueOf(id));
 
-                    DownloadJsonTrailerTask trailerReview = new DownloadJsonTrailerTask(getContext());
-                    trailerReview.execute(String.valueOf(id));
+
 
                    // Log.v(LOG_TAG, movieValues.toString());
                 }

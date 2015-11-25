@@ -44,7 +44,7 @@ public class DownloadJsonReviewTask extends AsyncTask <String, Void, Void> {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("http://api.themoviedb.org/3/movie/");
         stringBuilder.append(reviewID);
-        stringBuilder.append("/reviews?api_key=XXXX");
+        stringBuilder.append("/reviews?api_key=xxxx");
 
 
         try{
@@ -138,7 +138,7 @@ public class DownloadJsonReviewTask extends AsyncTask <String, Void, Void> {
                 reviewVector.toArray(reviewArray);
                 inserted = mContext.getContentResolver().bulkInsert(MovieContract.Review.CONTENT_URI, reviewArray);
             }
-            //Log.d(LOG_TAG, "Complete " + inserted + " inserted");
+            Log.d(LOG_TAG, "Complete " + inserted + " inserted");
         }catch (JSONException e){
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();

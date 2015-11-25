@@ -115,7 +115,7 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
         super.onResume();
 
 
-       // Log.v("MainActivity", "CURSOR onResume");
+    //    Log.v("MainActivity", "CURSOR onResume");
         String sort = prefs.getString(getString(R.string.pref_sort_key), getString(R.string.pref_sort_default));
         //int id= mainActivityFragment.getIdValue();
         if (this.sortType == null){
@@ -133,7 +133,7 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
             this.mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movie);
             if(null != mainActivityFragment){
               //  Log.v("MainActivity", "CURSOR null != mainActivityFragment ");
-
+//Log.v(LOG_TAG,  "SORT CHANGED");
                 mainActivityFragment.onSortChange();
             }
 
@@ -283,6 +283,11 @@ public class MainActivity extends ActionBarActivity implements MainActivityFragm
     public void shareData(String str) {
         this.shareMessage = str;
        // Log.v("MainActivity SHARE ", shareMessage);
+    }
+
+    @Override
+    public void saveUri(Uri uri) {
+        //onItemSelected(uri);
     }
 /*@Override
     public void onFirstLoad(Uri movieUri) {

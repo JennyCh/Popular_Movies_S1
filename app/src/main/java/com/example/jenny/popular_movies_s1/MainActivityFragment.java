@@ -72,7 +72,7 @@ import java.lang.Runnable;
  */
 public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final int MOVIE_LOADER = 0;
+    private static final int MOVIE_LOADER = 5;
 
     private final static String LOG_TAG = "MainActivityFragment";
     private MovieAdapter mMovieAdapter;
@@ -88,7 +88,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private View view;
     private SharedPreferences prefs;
     private static final String SELECTED_KEY = "selected_position";
-    private int idValue;
+     int idValue;
 
 
     public int getIdValue() {
@@ -126,26 +126,36 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
            // Log.v(LOG_TAG, "CURSOR POSITION " + cursor.getPosition());
             cursor.moveToNext();
             // for (int i = 0; i <= 1; i++) {
-            if (mPosition == 0) {
-                int idColumn = cursor.getColumnIndex(MovieContract.Movie._ID);
-                this.idValue = cursor.getInt(idColumn);
-                setFirstElementID();
+      //      Log.v(LOG_TAG,  "idValue " + idValue);
+
+            if(idValue == 0) { //stop from refreshing to 0 position in detail when clicked like
+                if (cursor.getPosition() == 0) {
+                    int idColumn = cursor.getColumnIndex(MovieContract.Movie._ID);
+                    this.idValue = cursor.getInt(idColumn);
+           //         Log.v(LOG_TAG, "SET ID VALUE TO FIRST ELEMENT IN DATASET " + idValue);
+                    setFirstElementID();
+                }
+                mPosition = 0;
+            }else{
+               // Log.v(LOG_TAG, "idValue is not 0");
             }
             //}
            // Log.v(LOG_TAG, "CURSOR 1" + String.valueOf(idValue));
 
             //cursor.close();
         }else{
+
             idValue = 0;
+       //     Log.v(LOG_TAG, "SET ID VALUE TO " + idValue + " cursor returned nothing");
            // Log.v(LOG_TAG, "CURSOR 2" + String.valueOf(idValue));
         }
 
         mMovieAdapter.swapCursor(cursor);
 
-        if(mPosition != GridView.INVALID_POSITION){
+     /*   if(mPosition != GridView.INVALID_POSITION){
             //Log.v(LOG_TAG, "SAVED SETTING POSITION " + mPosition);
             gridView.smoothScrollToPosition(mPosition);
-        }
+        }*/
         // mMovieAdapter.swapCursor(cursor);
 
     }
@@ -177,6 +187,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
            // Log.v(LOG_TAG,  "SAVING INSTANCE STATE " + mPosition);
             outState.putInt(SELECTED_KEY, mPosition);
         }
+
+      outState.putString("MOVIEID", String.valueOf(idValue) );
         super.onSaveInstanceState(outState);
     }
 
@@ -184,6 +196,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null){
+            this.idValue = Integer.valueOf(savedInstanceState.getString("MOVIEID"));
+            this.mPosition= savedInstanceState.getInt(SELECTED_KEY);
+          //  Log.v(LOG_TAG, "onSaveInstanceState loading element" + idValue + " mPosition " + mPosition );
+            ((Callback) getActivity()).onFirstLoad(idValue);
+        }
+
         setHasOptionsMenu(true);
 
     }
@@ -227,11 +247,13 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     int idColumn = cursor.getColumnIndex(MovieContract.Movie._ID);
                     String idData = cursor.getString(idColumn);
-                   // Log.v(LOG_TAG, "PASS TO CALLBACK " + MovieContract.Movie.buildMovieID(Integer.valueOf(idData)).toString());
+                    // Log.v(LOG_TAG, "PASS TO CALLBACK " + MovieContract.Movie.buildMovieID(Integer.valueOf(idData)).toString());
+                    //((Callback) getActivity()).onFirstLoad(Integer.valueOf(idData));
                     ((Callback) getActivity()).onItemSelected(MovieContract.Movie.buildMovieID(Integer.valueOf(idData)));
+                 //   Log.v(LOG_TAG, "PADDING ID ON SELECTED " + idData);
 
                 }
-               // Log.v(LOG_TAG, "GLOBAL POSITION " + position);
+                // Log.v(LOG_TAG, "GLOBAL POSITION " + position);
                 mPosition = position;
 
 
@@ -275,6 +297,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         update();
         ((Callback) getActivity()).onFirstLoad(0);
         this.mPosition = 0;
+        this.idValue = 0;
         getLoaderManager().restartLoader(MOVIE_LOADER, null, this);
     }
 
