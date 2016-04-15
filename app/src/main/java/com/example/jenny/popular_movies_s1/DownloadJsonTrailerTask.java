@@ -44,7 +44,9 @@ public class DownloadJsonTrailerTask extends AsyncTask<String, Void, Void> {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("http://api.themoviedb.org/3/movie/");
             stringBuilder.append(movieID);
-            stringBuilder.append("/videos?api_key=xxxx");
+            stringBuilder.append("/videos?api_key=");
+            stringBuilder.append(mContext.getResources().getString(R.string.API_KEY));
+
 
             //if (!"9643".equals(movieID)) {
                 try {

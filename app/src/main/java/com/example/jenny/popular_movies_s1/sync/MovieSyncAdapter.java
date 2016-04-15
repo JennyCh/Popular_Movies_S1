@@ -18,7 +18,6 @@ import android.util.Log;
 
 import com.example.jenny.popular_movies_s1.DownloadJsonReviewTask;
 import com.example.jenny.popular_movies_s1.DownloadJsonTrailerTask;
-import com.example.jenny.popular_movies_s1.Movie;
 import com.example.jenny.popular_movies_s1.R;
 import com.example.jenny.popular_movies_s1.data.MovieContract;
 
@@ -72,7 +71,8 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("http://api.themoviedb.org/3/discover/movie?sort_by=");
         stringBuilder.append(sortType);
-        stringBuilder.append(".desc&api_key=xxxx");
+        stringBuilder.append(".desc&api_key=");
+        stringBuilder.append(getContext().getResources().getString(R.string.API_KEY));
 
        // Log.v(LOG_TAG, "onHandleIntent " + stringBuilder.toString());
 

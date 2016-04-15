@@ -44,7 +44,8 @@ public class DownloadJsonReviewTask extends AsyncTask <String, Void, Void> {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("http://api.themoviedb.org/3/movie/");
         stringBuilder.append(reviewID);
-        stringBuilder.append("/reviews?api_key=xxxx");
+        stringBuilder.append("/reviews?api_key=");
+        stringBuilder.append(mContext.getResources().getString(R.string.API_KEY));
 
 
         try{
